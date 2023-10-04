@@ -1,4 +1,3 @@
-
 public class Rota {
 	//#region atributos
 	private double quilometragem;
@@ -47,3 +46,4 @@ public class Rota {
 
 	//endregion
 }
+

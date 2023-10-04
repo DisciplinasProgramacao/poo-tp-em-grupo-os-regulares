@@ -1,4 +1,3 @@
-
 public class Tanque {
 	//#region atributos
 	private double capacidadeMaxima;
