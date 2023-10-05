@@ -24,7 +24,7 @@ public class Tanque {
 	//#region métodos
 
 	/**
-	 * 
+	 * Abastece o tanque de combustível.
 	 * @param litros recebe volume de litros
 	 * @return o valor abastecido
 	 */
@@ -58,6 +58,7 @@ public class Tanque {
 		return valorAbastecido;
 	}
 
+	//Abastece o tanque até sua capacidade máxima.
 	private void encherTanque ()
 	{
 		capacidadeAtual=capacidadeMaxima;
@@ -79,6 +80,11 @@ public class Tanque {
 		
 	}
 
+	/**
+	 * Verifica se o tamanho do tanque é suficiente para cumprir a rota
+	 * @param km recebe a quilometragem da rota
+	 * @return TRUE se for capaz, FALSE se não é.
+	 */
 	public boolean possuiAutonomia (double km)
 	{
 		boolean resposta=true;
@@ -93,6 +99,11 @@ public class Tanque {
 		return resposta;
 	}
 
+	/**
+	 * Verifica quantos litros são necessários para que o veículo possua autonomia para completar a viagem.
+	 * @param km da rota a ser feita.
+	 * @return quantos litros precisam ser abastecidos.
+	 */
 	public double litrosFaltando ( double km)
 	{
 		double litrosPrecisam = km/CONSUMO;
