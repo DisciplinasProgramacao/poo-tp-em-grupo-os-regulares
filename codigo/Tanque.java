@@ -3,17 +3,17 @@ public class Tanque {
 	private double capacidadeMaxima;
 	private double capacidadeAtual;
 	private final static double CONSUMO;
+	private COMBUSTIVEL combustivel;
 	//#endregion
-
-	
 
 	/*
      * Construtor da classe Tanque
      * @param a capacidade Maxima e capacidade atual de um tanque. Ambos tipo double
      */
-	public Tanque(double capacidadeMaxima) {
+	public Tanque(double capacidadeMaxima, COMBUSTIVEL c) {
 		this.capacidadeMaxima = capacidadeMaxima;
 		this.capacidadeAtual=0;
+		this.combustivel = c;
 	}
 	static{
 		
