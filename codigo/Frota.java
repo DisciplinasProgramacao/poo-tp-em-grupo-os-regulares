@@ -37,9 +37,8 @@ public class Frota {
 	public String relatorioFrota() {
 		StringBuilder aux2 = new StringBuilder();
 
-		for (int i = 0; i < qtdVeiculos; i++) {
-			Veiculo atual = veiculos.get(i);
-			aux2.append(atual.toString());
+		for(Veiculo v: veiculos){
+			aux2.append(v.toString());
 		}
 		return aux2.toString();
 	}
@@ -68,17 +67,15 @@ public class Frota {
 	 */
 	public Veiculo localizarVeiculo(String placa) {
 		// Veiculo atual=new Veiculo();
-		Veiculo atual;
+		Veiculo atual=null;
 
-		for (int i = 0; i < qtdVeiculos; i++) {
-			atual = veiculos.get(i);
-
-			if ((atual.getPlaca()).equals(placa)) {
-				return atual;
+		for(Veiculo v: veiculos){
+			if(v.getPlaca().equals(placa)){
+				atual = v;
 			}
 		}
 
-		return null;
+		return atual;
 
 	}
 
@@ -91,12 +88,9 @@ public class Frota {
 	 */
 	public double quilometragemTotal() {
 		double kmTotalVeiculos = 0;
-		//Veiculo atual = new Veiculo();
-		Veiculo atual; 
-
-		for (int i = 0; i < qtdVeiculos; i++) {
-			atual = veiculos.get(i);
-			kmTotalVeiculos += atual.getKmTotal();
+	
+		for(Veiculo v: veiculos){
+			kmTotalVeiculos += v.getKmTotal();
 		}
 		return kmTotalVeiculos;
 	}
@@ -114,7 +108,6 @@ public class Frota {
 		double maiorKm = maiorV.getKmTotal();
 
 		for (int i = 1; i < qtdVeiculos; i++) {
-
 			Veiculo atual = veiculos.get(i);
 			double atualKm = atual.getKmTotal();
 
@@ -124,7 +117,6 @@ public class Frota {
 
 			}
 		}
-
 		return retorno;
 
 	}
@@ -160,30 +152,38 @@ public class Frota {
 		return retorno;
 	}
 
-	public String relatorioRotas(){
-		StringBuilder aux = new StringBuilder();
+	// public String relatorioRotas(){
+	// 	StringBuilder aux = new StringBuilder();
 
+	// 	for (Veiculo veiculo : veiculos) {
+
+	// 		System.out.println("ENTROU NO FOR DE FROTA");
+	// 		aux.append(veiculo.relatorioRotas());
+	// 	}
+
+	// 	return aux.toString();
+	// }
+	
+	public void relatorioRotas(){
 		for (Veiculo veiculo : veiculos) {
-			aux.append(veiculo.relatorioRotas());
+			veiculo.relatorioRotas(veiculo.getPlaca());
 		}
-
-		return aux.toString();
 	}
 
 	public String quilometragemTotalVeiculo(String placa){
 
+		Veiculo v = localizarVeiculo(placa);
 		StringBuilder aux = new StringBuilder();
 
-		for (Veiculo veiculo : veiculos) {
-			if (veiculo.getPlaca().equals(placa)){
-				aux.append(veiculo.getKmTotal()) ;
-			}
-			else{
-				aux.append("Esta placa não corresponde a um veículo da frota");
-			}
+		if(v!=null){
+			aux.append("A quilometragem total do veículo com a placa ").append(placa).append(" é de: ");
+			aux.append(v.getKmTotal()).append(" km");
+		}
+		else{
+			aux.append("Esta placa não corresponde a um veículo da frota");
 		}
 
-		return aux.toString();
+		 return aux.toString();
 	}
 
 	// #endregion

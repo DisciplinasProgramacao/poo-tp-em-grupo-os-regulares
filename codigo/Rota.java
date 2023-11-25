@@ -22,10 +22,11 @@ public class Rota {
      * Método que retorna uma string representando um relatório de rota percorrida.
      * @return String com a descrição do relatorio da rota
      */
-	public String relatorio() {
-		String aux;
-		aux = "A rota percorrida do dia " + data + " tem " +quilometragem +" km";
-		return aux;
+	public String relatorio(String placa) {
+		StringBuilder aux = new StringBuilder();
+		aux.append("A rota percorrida do dia ").append(data.dataFormatada()).append("pelo veículo de placa: ").append(placa)
+		.append(" possui ").append(quilometragem).append(" km");
+		return aux.toString();
 	}
 
 	public double getQuilometragem() {

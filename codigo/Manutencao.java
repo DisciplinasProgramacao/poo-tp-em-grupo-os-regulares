@@ -1,26 +1,28 @@
 public class Manutencao{
+
     public Manutencao(){
 
     }
-    public double manutencaoPeriodica(double km,int manut){
-        if(verificarPeriodica(km, manut)){
+    public double manutencaoencaoPeriodica(double kmAtual,double kmManutencao){
+        if(verificar(kmAtual, kmManutencao)){
             return 0d;
         }
         else{
-            return km;
+            return kmAtual;
         }        
     }
 
-    public boolean verificarPeriodica(double km, int manut){
-        if(km>=manut){
-            return true;
+    public double manutencaoencaoPecas(double kmAtual, double kmManutencao){
+        if(verificar(kmAtual, kmManutencao)){
+            return 0d;
         }
         else{
-            return false;
-        }
+            return kmAtual;
+        }     
     }
-    public boolean verificarPecas(double km, int manut){
-        if(km>=manut){
+    
+    public boolean verificar(double kmAtual, double kmManutencao){
+        if(kmAtual>=kmManutencao){
             return true;
         }
         else{
@@ -28,12 +30,4 @@ public class Manutencao{
         }
     }
 
-    public double manutencaoPecas(double km, int manut){
-        if(verificarPecas(km, manut)){
-            return 0d;
-        }
-        else{
-            return km;
-        }     
-    }
 }

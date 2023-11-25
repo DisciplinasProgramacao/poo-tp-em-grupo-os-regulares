@@ -9,22 +9,21 @@ public class App {
           // Criando uma frota de veículos com capacidade para 5 veículos
         Frota frota = new Frota(5);
         
-
-        // Criando alguns veículos e adicionando-os à frota
-        Veiculo veiculo1 = new Carro("ABC1234", COMBUSTIVEL.ALCCOL); // Placa e capacidade do tanque
+        //Criando alguns veículos e adicionando-os à frota
+        //Veiculo veiculo1 = new Carro("ABC1234", COMBUSTIVEL.ALCCOL); // Placa e capacidade do tanque
         Veiculo veiculo2 = new Caminhao("DEF5678", COMBUSTIVEL.DIESEL);
         Veiculo veiculo3 = new Van("GHI9012", COMBUSTIVEL.GASOLINA);
         Veiculo veiculo4 = new Furgao("JKL3456", COMBUSTIVEL.GASOLINA);
 
-        frota.adicionarVeiculo(veiculo1);
+        //frota.adicionarVeiculo(veiculo1);
         frota.adicionarVeiculo(veiculo2);
         frota.adicionarVeiculo(veiculo3);
         frota.adicionarVeiculo(veiculo4);
 
         // Criando algumas rotas para os veículos
-        Rota rota1 = new Rota(75.0, new Data(10, 1, 2023)); // Quilometragem e data
-        Rota rota2 = new Rota(75.0, new Data(15, 1, 2023));
-        Rota rota3 = new Rota(200.0, new Data(20, 1, 2023));
+        // Rota rota1 = new Rota(75.0, new Data(10, 1, 2023)); // Quilometragem e data
+        // Rota rota2 = new Rota(75.0, new Data(15, 1, 2023));
+        // Rota rota3 = new Rota(200.0, new Data(20, 1, 2023));
         Rota rota4 = new Rota(125.0, new Data(12,1,2023));
 
         Rota r1 = new Rota(150.0, new Data(2, 2, 2023)); 
@@ -41,10 +40,10 @@ public class App {
         Rota t5 = new Rota (125.0,new Data (13,1,2023));
 
         // Adicionando as rotas aos veículos
-        veiculo1.addRota(rota1);
-        veiculo1.addRota(rota1);
-        veiculo1.addRota(rota2);
-        veiculo1.addRota(rota3);
+        // veiculo1.addRota(rota1);
+        // veiculo1.addRota(rota1);
+        // veiculo1.addRota(rota2);
+        // veiculo1.addRota(rota3);
         
 
         veiculo2.addRota(r1);
@@ -75,11 +74,19 @@ public class App {
        
         System.out.println("Quilometragem total da frota: " + frota.quilometragemTotal() + " km");
 
-        System.out.println("Relatório de rotas de cada veículo: "+frota.relatorioRotas());
+        //ALTERNATIVA A
+        // System.out.println("Relatório de rotas de cada veículo: ");
+        // frota.relatorioRotas();
 
+        //ALTERNATIVA B
         System.out.println("Digite a placa do veículo que deseja verificar sua quilometragem total: ");
         placa = teclado.next();
+        frota.localizarVeiculo(placa);
         System.out.println(frota.quilometragemTotalVeiculo(placa));
+
+        //ALTERNATIVA C
+        
+        //ALTERNATIVA D
 
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 

@@ -12,9 +12,10 @@ public class Veiculo {
 	private double totalReabastecido;
 	private double kmTotal;
 	private double kmMes;
-	protected double kmManutencao;
+	protected double kmPeriodica;
+	protected double kmPecas;
 	protected Manutencao manutencao;
-	
+
 	// #endregion
 
 	// #region Construtores/inicializadores
@@ -41,7 +42,7 @@ public class Veiculo {
 		this.quantRotas = 0;
 		this.kmTotal = 0;
 		this.kmMes = 0;
-		this.kmManutencao=0;
+		this.kmPeriodica = 0;
 		this.manutencao = new Manutencao();
 	}
 	// #endregion
@@ -84,6 +85,7 @@ public class Veiculo {
 
 		boolean trocouDeMes = verificarMes(rota);
 
+
 		if (trocouDeMes == true) {
 			resetMes();
 		}
@@ -116,6 +118,8 @@ public class Veiculo {
 		if (verificaRota(rota) == true) {
 			this.rotas[quantRotas] = rota;
 			this.quantRotas++;
+			this.kmPeriodica += rota.getQuilometragem();
+			this.kmPecas += rota.getQuilometragem();
 			this.percorrerRota(rota);
 			adicionada = true;
 		} else {
@@ -209,7 +213,6 @@ public class Veiculo {
 
 		return "\n" +
 
-			
 				"Veiculo Placa: " + placa + "\n" +
 				"Total Reabastecido: " + formato.format(totalReabastecido) + "\n" +
 				"KM Total: " + formato.format(kmTotal) + "\n" +
@@ -217,18 +220,20 @@ public class Veiculo {
 				" ------------------ " + "\n";
 	}
 
-	public String relatorioRotas() {
-		StringBuilder relatorio = new StringBuilder();
+	public void relatorioRotas(String placa) {
+		// StringBuilder relatorio = new StringBuilder();
 
 		if (quantRotas > 0) {
 			for (Rota rota : rotas) {
-				relatorio.append(rota.toString());
+				System.out.println(rota.relatorio(placa));
+				// relatorio.append();
 			}
 		} else {
-			relatorio.append("Veículo não possui rotas.\n");
+			System.out.println("Veículo não possui rotas.\n");
+			// relatorio.append("Veículo não possui rotas.\n");
 		}
 
-		return relatorio.toString();
+		// return relatorio.toString();
 	}
 
 	// #endregion
