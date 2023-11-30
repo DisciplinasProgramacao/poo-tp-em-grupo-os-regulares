@@ -75,8 +75,8 @@ public class App {
         System.out.println("Quilometragem total da frota: " + frota.quilometragemTotal() + " km");
 
         //ALTERNATIVA A
-         System.out.println("Relatório de rotas de cada veículo: ");
-         frota.relatorioRotas();
+        System.out.println("Relatório de rotas de cada veículo: ");
+        frota.relatorioRotas();
 
         //ALTERNATIVA B
         System.out.println("Digite a placa do veículo que deseja verificar sua quilometragem total: ");

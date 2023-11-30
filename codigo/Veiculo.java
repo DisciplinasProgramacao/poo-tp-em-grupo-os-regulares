@@ -220,20 +220,22 @@ public class Veiculo {
 				" ------------------ " + "\n";
 	}
 
-	public void relatorioRotas(String placa) {
-		// StringBuilder relatorio = new StringBuilder();
+	public String relatorioRotas(String placa) {
+		StringBuilder relatorio = new StringBuilder();
 
 		if (quantRotas > 0) {
 			for (Rota rota : rotas) {
-				System.out.println(rota.relatorio(placa));
-				// relatorio.append();
+				if(rota != null){
+					//System.out.println(rota.relatorio(placa));
+				    relatorio.append(rota.relatorio(placa));
+				}
 			}
 		} else {
-			System.out.println("Veículo não possui rotas.\n");
-			// relatorio.append("Veículo não possui rotas.\n");
+			//System.out.println("Veículo não possui rotas.\n");
+			relatorio.append("Veículo não possui rotas.\n");
 		}
 
-		// return relatorio.toString();
+		return relatorio.toString();
 	}
 
 	// #endregion

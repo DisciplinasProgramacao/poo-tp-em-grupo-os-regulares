@@ -5,6 +5,7 @@ O projeto tem como objetivo a criação de um programa que vai automatizar os pr
 ## Alunos integrantes da equipe
 
 * Ana Luíza Gonçalves Leite
+* Caio Henrique Rodrigues Luz
 * Heitor Meinicke Ribeiro
 * João Victor Vasconcellos de Santana
 * Letícia Gomes Saldanha Costa 
