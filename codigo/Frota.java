@@ -19,7 +19,7 @@ public class Frota {
 	public Frota(int tamanhoFrota) {
 		this.tamanhoFrota = tamanhoFrota;
 		// veiculos = new ArrayList<Veiculo>();
-		veiculos = new ArrayList<Veiculo>(tamanhoFrota);
+		veiculos = new ArrayList<Veiculo>();
 		this.qtdVeiculos = 0;
 	}
 	// #endregion

@@ -115,7 +115,7 @@ public class Veiculo {
 	public boolean addRota(Rota rota) {
 		boolean adicionada = false;
 
-		if (verificaRota(rota) == true) {
+		if (verificaRota(rota)) {
 			this.rotas[quantRotas] = rota;
 			this.quantRotas++;
 			this.kmPeriodica += rota.getQuilometragem();
