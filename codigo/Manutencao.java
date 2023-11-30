@@ -1,33 +1,16 @@
 public class Manutencao{
+    private double km;
+    private String descricao;
 
-    public Manutencao(){
-
-    }
-    public double manutencaoencaoPeriodica(double kmAtual,double kmManutencao){
-        if(verificar(kmAtual, kmManutencao)){
-            return 0d;
-        }
-        else{
-            return kmAtual;
-        }        
+    public Manutencao(double km, String descricao){
+        this.km = km;
+        this.descricao=descricao;
     }
 
-    public double manutencaoencaoPecas(double kmAtual, double kmManutencao){
-        if(verificar(kmAtual, kmManutencao)){
-            return 0d;
-        }
-        else{
-            return kmAtual;
-        }     
-    }
-    
-    public boolean verificar(double kmAtual, double kmManutencao){
-        if(kmAtual>=kmManutencao){
-            return true;
-        }
-        else{
-            return false;
-        }
+    //Criar toString 
+    @Override
+    public String toString(){
+        return ("Manutenção do tipo "+descricao+" realizada com: "+km+" km");
     }
 
 }

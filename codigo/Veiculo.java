@@ -1,7 +1,9 @@
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Veiculo {
+public abstract class  Veiculo {
 	// #region atributos
 	private final static int MAXROTAS;
 	private String placa;
@@ -14,7 +16,10 @@ public class Veiculo {
 	private double kmMes;
 	protected double kmPeriodica;
 	protected double kmPecas;
+	protected List<Manutencao> listaManutencao;
 	protected Manutencao manutencao;
+	private double kmProxManutencaoPreventiva;
+	private double kmProxManutencaoPecas;
 
 	// #endregion
 
@@ -43,7 +48,7 @@ public class Veiculo {
 		this.kmTotal = 0;
 		this.kmMes = 0;
 		this.kmPeriodica = 0;
-		this.manutencao = new Manutencao();
+		this.listaManutencao = new ArrayList<>();
 	}
 	// #endregion
 
@@ -118,17 +123,28 @@ public class Veiculo {
 		if (verificaRota(rota)) {
 			this.rotas[quantRotas] = rota;
 			this.quantRotas++;
-			this.kmPeriodica += rota.getQuilometragem();
-			this.kmPecas += rota.getQuilometragem();
 			this.percorrerRota(rota);
 			adicionada = true;
-		} else {
-			adicionada = false;
 		}
-
+		this.verificaManutencoes();
 		return adicionada;
 	}
+	
+	private void verificaManutencoes(){	
+		if(this.kmProxManutencaoPreventiva <= this.kmTotal){
+			listaManutencao.add(new Manutencao(this.kmTotal,"preventiva"));
+			this.kmProxManutencaoPreventiva = this.gerarNovaManutencaoPreventiva();
+		}
 
+		if(this.kmProxManutencaoPecas <= this.kmTotal){
+			listaManutencao.add(new Manutencao(this.kmTotal,"pecas"));
+			this.kmProxManutencaoPreventiva = this.gerarNovaManutencaoPecas();
+		}
+	}
+
+	public abstract double gerarNovaManutencaoPreventiva();
+	public abstract double gerarNovaManutencaoPecas();
+	
 	/**
 	 * 
 	 * @param litros recebe a quantidade a ser abastecida
@@ -220,22 +236,20 @@ public class Veiculo {
 				" ------------------ " + "\n";
 	}
 
-	public String relatorioRotas(String placa) {
-		StringBuilder relatorio = new StringBuilder();
+	public void relatorioRotas(String placa) {
+		// StringBuilder relatorio = new StringBuilder();
 
 		if (quantRotas > 0) {
 			for (Rota rota : rotas) {
-				if(rota != null){
-					//System.out.println(rota.relatorio(placa));
-				    relatorio.append(rota.relatorio(placa));
-				}
+				System.out.println(rota.relatorio(placa));
+				// relatorio.append();
 			}
 		} else {
-			//System.out.println("Veículo não possui rotas.\n");
-			relatorio.append("Veículo não possui rotas.\n");
+			System.out.println("Veículo não possui rotas.\n");
+			// relatorio.append("Veículo não possui rotas.\n");
 		}
 
-		return relatorio.toString();
+		// return relatorio.toString();
 	}
 
 	// #endregion
