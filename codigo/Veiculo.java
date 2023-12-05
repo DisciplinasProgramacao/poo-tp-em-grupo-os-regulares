@@ -17,9 +17,8 @@ public abstract class  Veiculo {
 	protected double kmPeriodica;
 	protected double kmPecas;
 	protected List<Manutencao> listaManutencao;
-	protected Manutencao manutencao;
-	private double kmProxManutencaoPreventiva;
-	private double kmProxManutencaoPecas;
+	private double kmProxManutencaoPreventiva=0;
+	private double kmProxManutencaoPecas=0;
 
 	// #endregion
 
@@ -130,6 +129,11 @@ public abstract class  Veiculo {
 		return adicionada;
 	}
 	
+	/*
+	 * Método que verifica se é necessário realizar uma manutenção no veículo
+	 * Verifica se a quilometragem da próxima manutenção preventiva a ser feita é menor do que a da rota que será atribuída.
+	 * 
+	 */
 	private void verificaManutencoes(){	
 		if(this.kmProxManutencaoPreventiva <= this.kmTotal){
 			listaManutencao.add(new Manutencao(this.kmTotal,"preventiva"));
@@ -138,7 +142,7 @@ public abstract class  Veiculo {
 
 		if(this.kmProxManutencaoPecas <= this.kmTotal){
 			listaManutencao.add(new Manutencao(this.kmTotal,"pecas"));
-			this.kmProxManutencaoPreventiva = this.gerarNovaManutencaoPecas();
+			this.kmProxManutencaoPecas = this.gerarNovaManutencaoPecas();
 		}
 	}
 

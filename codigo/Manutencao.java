@@ -1,16 +1,20 @@
 public class Manutencao{
     private double km;
-    private String descricao;
+    private EtipoManutencao tipoManutencao;
 
     public Manutencao(double km, String descricao){
         this.km = km;
-        this.descricao=descricao;
+        if(descricao.equals("preventiva")){
+             this.tipoManutencao= EtipoManutencao.PERIODICA;
+        }
+        else{
+            this.tipoManutencao= EtipoManutencao.PECAS;
+        }
     }
 
-    //Criar toString 
     @Override
     public String toString(){
-        return ("Manutenção do tipo "+descricao+" realizada com: "+km+" km");
+        return ("Manutenção do tipo "+tipoManutencao.getDescricao()+" realizada com: "+km+" km"+" com valor de R$"+tipoManutencao.getValor() );
     }
 
 }

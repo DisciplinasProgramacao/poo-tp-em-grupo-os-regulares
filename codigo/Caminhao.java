@@ -1,17 +1,19 @@
 public class Caminhao extends Veiculo {
 
     private static final int CAPACIDADE_TANQUE = 250;
-    private EtipoManutencao tipo;
+    private EMaxManutencoes tipo;
 
     public Caminhao(String placa, COMBUSTIVEL tipoCombustivel) {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
-        this.tipo = EtipoManutencao.CAMINHAO;
+        this.tipo = EMaxManutencoes.CAMINHAO;
     }
 
     @Override
     public double gerarNovaManutencaoPreventiva(){
-        return this.getKmTotal()+this.tipo.getMaxPeriodica();
+        return this.getKmTotal()+this.tipo.getMaxKm();
     };
+
+
      @Override
     public double gerarNovaManutencaoPecas(){
         return this.getKmTotal()+this.tipo.getMaxPecas();

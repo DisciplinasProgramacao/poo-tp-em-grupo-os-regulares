@@ -1,24 +1,22 @@
-enum EtipoManutencao{
-   VAN(10_000,12_000),
-   CAMINHAO(10_000,10_000),
-   FURGAO(10000,12000),
-   CARRO(10000,10000);
+enum EtipoManutencao {
+    PERIODICA("periodica",150d),
+    PECAS("pecas",200d);
+
+     String descricao ;
+     double valor;
+
+    EtipoManutencao(String d, double v){
+        this.descricao = d;
+        this.valor =  v; 
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
     
-    double maxPeriodica, maxPecas;
-
-    EtipoManutencao(double maxKmPeriodica, double maxKmPecas){
-        this.maxPeriodica=maxKmPeriodica;
-        this.maxPecas=maxKmPecas;
-
-    }
-
-    public double getMaxPeriodica() {
-        return maxPeriodica;
-    }
-
-    public double getMaxPecas() {
-        return maxPecas;
-    }
-
-
 }
