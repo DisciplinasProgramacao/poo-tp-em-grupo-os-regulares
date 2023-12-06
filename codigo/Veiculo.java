@@ -2,6 +2,7 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+//import java.util.stream.Collectors;
 
 public abstract class  Veiculo {
 	// #region atributos
@@ -240,22 +241,34 @@ public abstract class  Veiculo {
 				" ------------------ " + "\n";
 	}
 
-	public void relatorioRotas(String placa) {
-		// StringBuilder relatorio = new StringBuilder();
+	public String relatorioRotas(String placa) {
+		 StringBuilder relatorio = new StringBuilder();
 
 		if (quantRotas > 0) {
 			for (Rota rota : rotas) {
-				System.out.println(rota.relatorio(placa));
-				// relatorio.append();
+				 relatorio.append(rota.relatorio(placa));
 			}
 		} else {
-			System.out.println("Veículo não possui rotas.\n");
-			// relatorio.append("Veículo não possui rotas.\n");
+			
+			relatorio.append("Veículo não possui rotas.\n");
 		}
 
-		// return relatorio.toString();
+		return relatorio.toString();
 	}
 
-	// #endregion
+//Como melhorar esse método?
+	public void relatorioManutencao(){
+		 listaManutencao.stream()
+		 .forEach(m -> System.out.println("Veículo de placa " + placa + ": " + m.relatorioManutencao()));
+	}
 
+	public double gastoTotal(){
+		double soma =0;
+		for(Manutencao m: listaManutencao){
+			soma+=m.getValor();
+		}
+		return (tanque.calcularPreco(kmTotal)+soma);
+	}
+		
 }
+

@@ -117,11 +117,16 @@ public class Tanque {
 		double valorGasto=km/CONSUMO;
 		capacidadeAtual-=valorGasto;
 	}
-	public void combustivelGasto (double km)
-	{
-		double combustivelGasto = km*CONSUMO;
-		atualizarTanque(combustivelGasto);
+	
+	// public void combustivelGasto (double km)
+	// {
+	// 	double combustivelGasto = km*CONSUMO;
+	// 	atualizarTanque(combustivelGasto);
 		
+	// }
+
+	public double calcularPreco(double kmTotal){
+		return (kmTotal*combustivel.getPrecoMedio())/combustivel.getConsumoMedio();
 	}
 
 	public double getCapacidadeMaxima() {

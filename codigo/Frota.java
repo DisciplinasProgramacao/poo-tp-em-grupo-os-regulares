@@ -13,7 +13,7 @@ public class Frota {
 
 	/*
 	 * Construtor da classe Frota
-	 * 
+	 *
 	 * @param a quantidade da frota tipo Int
 	 */
 	public Frota(int tamanhoFrota) {
@@ -30,7 +30,7 @@ public class Frota {
 	 * Este método utiliza um StringBuilder chamado aux2 para concatenar informações
 	 * sobre cada veículo em um array (veiculos).
 	 * Finalmente, ele retorna a string concatenada.
-	 * 
+	 *
 	 * @return String com a descrição do relatorio da frota
 	 */
 
@@ -45,7 +45,7 @@ public class Frota {
 
 	/**
 	 * Adiciona veículo na frota
-	 * 
+	 *
 	 * @param add veículo a ser adicionado
 	 */
 	public void adicionarVeiculo(Veiculo add) {
@@ -61,7 +61,7 @@ public class Frota {
 	/**
 	 * Método tem como objetivo procurar um veículo com uma placa específica dentro
 	 * de um array de veículos (veiculos)
-	 * 
+	 *
 	 * @param tipo String dígitos da placa
 	 * @return Veículo localizado ou nullo se não foi
 	 */
@@ -83,12 +83,12 @@ public class Frota {
 	 * Método que calcula a quilometragem total de um array de veículos (veiculos).
 	 * A quilometragem total é obtida somando os quilômetros totais individuais de
 	 * cada veículo no array.
-	 * 
+	 *
 	 * @return Double com a quilometragem total da frota
 	 */
 	public double quilometragemTotal() {
 		double kmTotalVeiculos = 0;
-	
+
 		for(Veiculo v: veiculos){
 			kmTotalVeiculos += v.getKmTotal();
 		}
@@ -98,7 +98,7 @@ public class Frota {
 	/**
 	 * Método para percorrer um array de veículos (veiculos) para encontrar o
 	 * veículo com a maior quilometragem total.
-	 * 
+	 *
 	 * @return Veiculo com a maior quilometragem
 	 */
 	public String maiorKmTotal() {
@@ -124,7 +124,7 @@ public class Frota {
 	/**
 	 * Método para percorrer um array de veículos (veiculos) para encontrar o
 	 * veículo com a maior média de quilometragem por rota entre todos os veículos..
-	 * 
+	 *
 	 * @return Veiculo com a maior média de km
 	 */
 	public String maiorKmMedia() {
@@ -163,7 +163,7 @@ public class Frota {
 
 	// 	return aux.toString();
 	// }
-	
+
 	public void relatorioRotas(){
 		for (Veiculo veiculo : veiculos) {
 			veiculo.relatorioRotas(veiculo.getPlaca());
@@ -184,6 +184,26 @@ public class Frota {
 		}
 
 		 return aux.toString();
+	}
+
+	public void relatorioManutencao(){
+		//  veiculos.stream()
+		//  		.map(v -> v.relatorioManutencao());
+
+		 for (Veiculo veiculo : veiculos) {
+			veiculo.relatorioManutencao();
+		 }
+	}
+
+	public String gastosTotais(){
+		StringBuilder aux = new StringBuilder();
+		double valor =0;
+		for (Veiculo veiculo : veiculos) {
+			aux.append("Valor total gasto pelo veículo de placa "+veiculo.getPlaca());
+			valor = veiculo.gastoTotal();
+			aux.append(" - R$ "+valor).append("\n");
+		}
+		return aux.toString();
 	}
 
 	// #endregion
