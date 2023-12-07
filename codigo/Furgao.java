@@ -5,6 +5,7 @@ public class Furgao extends Veiculo {
     public Furgao(String placa, COMBUSTIVEL tipoCombustivel) {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
         this.tipo = EMaxManutencoes.FURGAO;
+        this.setManutencoesIniciais(this.tipo);
     }
 
     @Override

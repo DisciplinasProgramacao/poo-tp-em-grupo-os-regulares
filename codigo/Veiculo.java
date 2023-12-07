@@ -2,7 +2,6 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.stream.Collectors;
 
 public abstract class  Veiculo {
 	// #region atributos
@@ -18,8 +17,8 @@ public abstract class  Veiculo {
 	protected double kmPeriodica;
 	protected double kmPecas;
 	protected List<Manutencao> listaManutencao;
-	private double kmProxManutencaoPreventiva=0;
-	private double kmProxManutencaoPecas=0;
+	protected double kmProxManutencaoPreventiva;
+	protected double kmProxManutencaoPecas;
 
 	// #endregion
 
@@ -85,11 +84,8 @@ public abstract class  Veiculo {
 	 */
 	private boolean verificaRota(Rota rota) {
 		boolean aprovada = true;
-
 		double kmNecessarios = rota.getQuilometragem();
-
 		boolean trocouDeMes = verificarMes(rota);
-
 
 		if (trocouDeMes == true) {
 			resetMes();
@@ -102,7 +98,6 @@ public abstract class  Veiculo {
 				} else {
 					this.abastecer(tanque.litrosFaltando(kmNecessarios));
 				}
-
 			}
 
 		} else
@@ -246,7 +241,9 @@ public abstract class  Veiculo {
 
 		if (quantRotas > 0) {
 			for (Rota rota : rotas) {
-				 relatorio.append(rota.relatorio(placa));
+				if(rota != null){
+				    relatorio.append(rota.relatorio(placa));
+				}
 			}
 		} else {
 			
@@ -257,11 +254,15 @@ public abstract class  Veiculo {
 	}
 
 //Como melhorar esse método?
-	public void relatorioManutencao(){
+	public String relatorioManutencao(){
+		StringBuilder aux = new StringBuilder();
+		String base = "O veiculo de placa";
 		 listaManutencao.stream()
-		 .forEach(m -> System.out.println("Veículo de placa " + placa + ": " + m.relatorioManutencao()));
+		 .forEach(m -> aux.append(base+this.placa+" "+m.relatorioManutencao()));
+		 return aux.toString();
 	}
 
+	//Melhorar este método
 	public double gastoTotal(){
 		double soma =0;
 		for(Manutencao m: listaManutencao){
@@ -269,6 +270,22 @@ public abstract class  Veiculo {
 		}
 		return (tanque.calcularPreco(kmTotal)+soma);
 	}
+
+	//Melhorar este método
+	public double mediakm(){
+		double soma =0;
+		for (Rota rota : rotas) {
+			if(rota!=null){
+				soma+=rota.getQuilometragem();
+			}
+		}
+		return (soma/quantRotas);
+	}
+
+	public void setManutencoesIniciais(EMaxManutencoes tipo2) {
+		kmProxManutencaoPreventiva=tipo2.maxKm;
+		kmProxManutencaoPecas=tipo2.maxPecas;
+    }
 		
 }
 

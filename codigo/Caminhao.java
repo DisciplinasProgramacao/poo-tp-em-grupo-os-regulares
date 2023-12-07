@@ -6,6 +6,8 @@ public class Caminhao extends Veiculo {
     public Caminhao(String placa, COMBUSTIVEL tipoCombustivel) {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
         this.tipo = EMaxManutencoes.CAMINHAO;
+        this.setManutencoesIniciais(this.tipo);
+
     }
 
     @Override

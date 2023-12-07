@@ -6,6 +6,7 @@ public class Van extends Veiculo{
     public Van(String placa, COMBUSTIVEL tipoCombustivel) {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
         this.tipo = EMaxManutencoes.VAN;
+        this.setManutencoesIniciais(this.tipo);
     }
 
     @Override

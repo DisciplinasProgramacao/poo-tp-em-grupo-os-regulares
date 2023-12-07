@@ -16,9 +16,9 @@ public class Frota {
 	 *
 	 * @param a quantidade da frota tipo Int
 	 */
+
 	public Frota(int tamanhoFrota) {
 		this.tamanhoFrota = tamanhoFrota;
-		// veiculos = new ArrayList<Veiculo>();
 		veiculos = new ArrayList<Veiculo>();
 		this.qtdVeiculos = 0;
 	}
@@ -35,12 +35,12 @@ public class Frota {
 	 */
 
 	public String relatorioFrota() {
-		StringBuilder aux2 = new StringBuilder();
+		StringBuilder aux = new StringBuilder();
 
-		for(Veiculo v: veiculos){
-			aux2.append(v.toString());
+		for (Veiculo v : veiculos) {
+			aux.append(v.toString());
 		}
-		return aux2.toString();
+		return aux.toString();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class Frota {
 	 *
 	 * @param add veículo a ser adicionado
 	 */
-	public void adicionarVeiculo(Veiculo add) {
+	public void adicionarVeiculo(Veiculo add) { // Colocar uma exceção de erro ao adicionar
 		Veiculo atual = add;
 		if (qtdVeiculos < this.tamanhoFrota) {
 			veiculos.add(qtdVeiculos, atual);
@@ -65,18 +65,14 @@ public class Frota {
 	 * @param tipo String dígitos da placa
 	 * @return Veículo localizado ou nullo se não foi
 	 */
-	public Veiculo localizarVeiculo(String placa) {
-		// Veiculo atual=new Veiculo();
-		Veiculo atual=null;
+	public Veiculo localizarVeiculo(String placa) { // Colocar uma exceção se o veículo não for encontrado
+		Veiculo atual;
 
-		for(Veiculo v: veiculos){
-			if(v.getPlaca().equals(placa)){
-				atual = v;
-			}
-		}
+		atual = veiculos.stream()
+				.filter(v -> v.getPlaca().equals(placa))
+				.findFirst().get();
 
 		return atual;
-
 	}
 
 	/**
@@ -89,9 +85,13 @@ public class Frota {
 	public double quilometragemTotal() {
 		double kmTotalVeiculos = 0;
 
-		for(Veiculo v: veiculos){
-			kmTotalVeiculos += v.getKmTotal();
-		}
+		// for (Veiculo v : veiculos) {
+		// kmTotalVeiculos += v.getKmTotal();
+		// }
+
+		kmTotalVeiculos = veiculos.stream()
+				.mapToDouble(Veiculo::getKmTotal)
+				.sum();
 		return kmTotalVeiculos;
 	}
 
@@ -104,21 +104,14 @@ public class Frota {
 	public String maiorKmTotal() {
 		String retorno = "";
 
-		Veiculo maiorV = veiculos.get(0);
-		double maiorKm = maiorV.getKmTotal();
+		Veiculo aux = veiculos.stream()
+		.max((v1,v2) ->v1.getKmTotal()>v2.getKmTotal()?1:-1)
+		.orElse(null);
 
-		for (int i = 1; i < qtdVeiculos; i++) {
-			Veiculo atual = veiculos.get(i);
-			double atualKm = atual.getKmTotal();
-
-			if (maiorKm < atualKm) {
-				maiorKm = atualKm;
-				retorno = atual.getPlaca();
-
-			}
+		if(aux!=null){
+			retorno= aux.getPlaca();
 		}
 		return retorno;
-
 	}
 
 	/**
@@ -128,80 +121,64 @@ public class Frota {
 	 * @return Veiculo com a maior média de km
 	 */
 	public String maiorKmMedia() {
-		String retorno = "";
 
-		Veiculo maior = veiculos.get(0);
-		double kmMediaMaior = maior.getKmTotal() / maior.getQuantRotas();
+		 String retorno = "";
 
-		Veiculo atual = veiculos.get(1);
+		Veiculo aux = veiculos.stream()
+		.max ((v1,v2) -> v1.mediakm() > v2.mediakm()? 1:-1)
+		.orElse(null);
 
-		double kmMedAtual = atual.getKmTotal() / atual.getQuantRotas();
 
-		for (int i = 2; i < qtdVeiculos; i++) {
-			if (kmMedAtual > kmMediaMaior) {
-				kmMediaMaior = kmMedAtual;
-				maior = atual;
-			}
-			atual = veiculos.get(i);
-			kmMedAtual = atual.getKmTotal() / atual.getQuantRotas();
-
+		if (aux!=null){
+			retorno = aux.getPlaca();
 		}
-
-		retorno = maior.getPlaca();
-
 		return retorno;
-	}
+	}	
 
-	// public String relatorioRotas(){
-	// 	StringBuilder aux = new StringBuilder();
+	public String relatorioRotas() {
 
-	// 	for (Veiculo veiculo : veiculos) {
-
-	// 		System.out.println("ENTROU NO FOR DE FROTA");
-	// 		aux.append(veiculo.relatorioRotas());
-	// 	}
-
-	// 	return aux.toString();
-	// }
-
-	public void relatorioRotas(){
+		StringBuilder aux = new StringBuilder();
 		for (Veiculo veiculo : veiculos) {
-			veiculo.relatorioRotas(veiculo.getPlaca());
+			aux.append(veiculo.relatorioRotas(veiculo.getPlaca()));
 		}
+		return aux.toString();
 	}
 
-	public String quilometragemTotalVeiculo(String placa){
+	public String quilometragemTotalVeiculo(String placa) {  //Exception de não existe veículo com a placa
 
 		Veiculo v = localizarVeiculo(placa);
 		StringBuilder aux = new StringBuilder();
 
-		if(v!=null){
+		if (v != null) {
 			aux.append("A quilometragem total do veículo com a placa ").append(placa).append(" é de: ");
 			aux.append(v.getKmTotal()).append(" km");
-		}
-		else{
+		} else {
 			aux.append("Esta placa não corresponde a um veículo da frota");
 		}
 
-		 return aux.toString();
+		return aux.toString();
 	}
 
-	public void relatorioManutencao(){
-		//  veiculos.stream()
-		//  		.map(v -> v.relatorioManutencao());
+	/*
+	 * Método que utiliza um stream para acessar o método "relatorioManutencao" de todos os veículo da frota.
+	 * 
+	 * @return String com as informações de relatórios dos veículos
+	 */
+	public String relatorioManutencao() {
 
-		 for (Veiculo veiculo : veiculos) {
-			veiculo.relatorioManutencao();
-		 }
+		return veiculos.stream()
+		.map(Veiculo::relatorioManutencao)
+		.reduce((a,b)-> a.concat("\n"+b))
+		.orElse(null);
 	}
 
-	public String gastosTotais(){
+	public String gastosTotais() {
 		StringBuilder aux = new StringBuilder();
-		double valor =0;
+		double valor = 0;
 		for (Veiculo veiculo : veiculos) {
-			aux.append("Valor total gasto pelo veículo de placa "+veiculo.getPlaca());
+			aux.append("Valor total gasto pelo veículo de placa " + veiculo.getPlaca());
 			valor = veiculo.gastoTotal();
-			aux.append(" - R$ "+valor).append("\n");
+			aux.append(" - R$ " + valor).append("\n");
 		}
 		return aux.toString();
 	}

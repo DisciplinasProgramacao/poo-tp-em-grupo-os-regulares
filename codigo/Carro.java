@@ -6,6 +6,7 @@ public class Carro extends Veiculo{
     public Carro(String placa, COMBUSTIVEL tipoCombustivel) {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
         this.tipo = EMaxManutencoes.CARRO;
+        this.setManutencoesIniciais(this.tipo);
     }
 
     @Override
