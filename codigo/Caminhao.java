@@ -7,14 +7,12 @@ public class Caminhao extends Veiculo {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
         this.tipo = EMaxManutencoes.CAMINHAO;
         this.setManutencoesIniciais(this.tipo);
-
     }
 
     @Override
     public double gerarNovaManutencaoPreventiva(){
         return this.getKmTotal()+this.tipo.getMaxKm();
     };
-
 
      @Override
     public double gerarNovaManutencaoPecas(){

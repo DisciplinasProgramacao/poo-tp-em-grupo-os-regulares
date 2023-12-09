@@ -1,9 +1,9 @@
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class  Veiculo {
+public abstract class Veiculo {
+
 	// #region atributos
 	private final static int MAXROTAS;
 	private String placa;
@@ -15,11 +15,9 @@ public abstract class  Veiculo {
 	private double kmTotal;
 	private double kmMes;
 	protected double kmPeriodica;
-	protected double kmPecas;
 	protected List<Manutencao> listaManutencao;
 	protected double kmProxManutencaoPreventiva;
 	protected double kmProxManutencaoPecas;
-
 	// #endregion
 
 	// #region Construtores/inicializadores
@@ -31,11 +29,13 @@ public abstract class  Veiculo {
 		this.mesAtual = 0;
 		this.quantRotas = 0;
 	}
+
 	/*
 	 * Construtor da classe Veículo
 	 * 
-	 * @param a dígitos da placa tipo String e a capacidade máxima do tanque tipo
-	 * Double
+	 * @param placa identificador do veículo
+	 * @param tanqueMax a capacidade máxima do tanque em litros
+	 * @tipoCombustivel especifica qual o combustível utilizado pelo veículo
 	 */
 
 	public Veiculo(String placa, int tanqueMax, COMBUSTIVEL tipoCombustivel) {
@@ -54,54 +54,50 @@ public abstract class  Veiculo {
 	// #region Métodos
 
 	/**
-	 * Método que verifica se a rota que deseja adicionar está no mesmo mês da
-	 * ultima adicionada
+	 * Método que verifica se a rota que deseja adicionar está no mesmo mês da última adicionada
 	 * 
-	 * @param Rota
-	 * @return TRUE se esta no mesmo mês da ultima adicionada, FALSE caso contrário
+	 * @param rota a ser verificada
+	 * @return TRUE se a rota está em um novo mês, FALSE se continua no mesmo mês
 	 */
 	private boolean verificarMes(Rota rota) {
 		boolean trocouDeMes = false;
 
-		Data rotaRecebidaD = rota.getData();
-		int recebidaM = rotaRecebidaD.getMes();
+		int rotaRecebidaD = rota.getData().getMes();
 
-		if (this.mesAtual < recebidaM) {
-			this.mesAtual = recebidaM;
-
+		if (this.mesAtual < rotaRecebidaD) {
+			this.mesAtual = rotaRecebidaD;
 			trocouDeMes = true;
-		} else
-			trocouDeMes = false;
-
+		} 
+	
 		return trocouDeMes;
 	}
 
 	/**
 	 * Analisa autonomia do tanque de gasolina para concluir a rota.
 	 * 
-	 * @param rota Recebe e verifica a possibilidade de adicionar a rota.
-	 * @return TRUE se foi aprovada, FALSE se não atende aos critérios.
+	 * @param rota rota a ser verificada 
+	 * @return TRUE se o mês possui menos de 30 rotas e se possui autonomia; FALSE se não atende aos critérios.
 	 */
 	private boolean verificaRota(Rota rota) {
 		boolean aprovada = true;
 		double kmNecessarios = rota.getQuilometragem();
-		boolean trocouDeMes = verificarMes(rota);
-
-		if (trocouDeMes == true) {
+		
+		if (verificarMes(rota)) {
 			resetMes();
 		}
 
 		if (this.quantRotas < MAXROTAS) {
 			if (kmNecessarios > tanque.autonomiaAtual()) {
-				if (tanque.possuiAutonomia(kmNecessarios) == false) {
-					aprovada = false;
-				} else {
+				if (tanque.possuiAutonomia(kmNecessarios)) {
 					this.abastecer(tanque.litrosFaltando(kmNecessarios));
+				} else {
+					aprovada = false;
 				}
-			}
 
-		} else
+			}
+		} else {
 			aprovada = false;
+		}
 
 		return aprovada;
 	}
@@ -124,62 +120,57 @@ public abstract class  Veiculo {
 		this.verificaManutencoes();
 		return adicionada;
 	}
-	
+
 	/*
-	 * Método que verifica se é necessário realizar uma manutenção no veículo
-	 * Verifica se a quilometragem da próxima manutenção preventiva a ser feita é menor do que a da rota que será atribuída.
-	 * 
+	 * Método que verifica se é necessário realizar uma manutenção no veículo.
+	 * Analisa se a quilometragem da próxima manutenção preventiva/de peças a ser feita é
+	 * menor do que a da rota que será atribuída.
 	 */
-	private void verificaManutencoes(){	
-		if(this.kmProxManutencaoPreventiva <= this.kmTotal){
-			listaManutencao.add(new Manutencao(this.kmTotal,"preventiva"));
+	private void verificaManutencoes() {
+		if (this.kmProxManutencaoPreventiva <= this.kmTotal) {
+			listaManutencao.add(new Manutencao(this.kmTotal, "preventiva"));
 			this.kmProxManutencaoPreventiva = this.gerarNovaManutencaoPreventiva();
 		}
 
-		if(this.kmProxManutencaoPecas <= this.kmTotal){
-			listaManutencao.add(new Manutencao(this.kmTotal,"pecas"));
+		if (this.kmProxManutencaoPecas <= this.kmTotal) {
+			listaManutencao.add(new Manutencao(this.kmTotal, "pecas"));
 			this.kmProxManutencaoPecas = this.gerarNovaManutencaoPecas();
 		}
 	}
 
 	public abstract double gerarNovaManutencaoPreventiva();
+
 	public abstract double gerarNovaManutencaoPecas();
-	
+
 	/**
-	 * 
+	 * Método que atualiza a variável "totalReabastecido" de acordo com a quantidade de litros abastecidos ao tanque
 	 * @param litros recebe a quantidade a ser abastecida
-	 *               soma o valor com o total já abastecido.
 	 */
 	public void abastecer(double litros) {
 		this.totalReabastecido += tanque.abastecer(litros);
-
 	}
 
 	/**
-	 * Método que soma a quilometragem total percorrida para mês atual.
-	 * 
-	 */
-
+	 * Método que atualiza a variável "kmNoMes" 
+	 * @param km quntidade de quilometros a ser adicionada
+	 * 	 */
 	public void kmNoMes(double km) {
-
 		this.kmMes += km;
-
 	}
 
 	/**
-	 * Método que calcula a quilometragem total, adicionando a quilometragem do mês
-	 * fornecida como parâmetro.
-	 * 
-	 * @param tipo Double quilometragem do mês.
-	 * @return tipo Double com a km do veículo percorrida no total.
+	 * Método que calcula a quilometragem total, adicionando a quilometragem do mês fornecida como parâmetro.
+	 * @param km quilometragem a ser adicionada
 	 */
 	public void kmTotal(double km) {
 		this.kmTotal += km;
-
 		kmNoMes(km);
-
 	}
 
+	/*
+	 * Método resposável por inicializar o vetor de rotas e zerar as variáveis kmMes e quantRotas
+	 * toda vez que há uma troca mês
+	 */
 	private void resetMes() {
 		this.kmMes = 0;
 		this.rotas = new Rota[MAXROTAS];
@@ -192,7 +183,7 @@ public abstract class  Veiculo {
 	 * combustível do tanque com base na quilometragem da rota e no consumo do
 	 * veículo (CONSUMO).
 	 * 
-	 * @param tipo Rota.
+	 * @param rota rota a ser percorrida por um veículo
 	 */
 	private void percorrerRota(Rota rota) {
 		double kmDaRota = rota.getQuilometragem();
@@ -200,6 +191,101 @@ public abstract class  Veiculo {
 		tanque.atualizarTanque(kmDaRota);
 	}
 
+	/*
+	 * Método responsável por gerar um relatório de rotas para um veículo com base
+	 * na placa fornecida.
+	 * 
+	 * @param placa identificador do veículo
+	 * 
+	 * @return Se o veículo possuir rotas, retorna o relatório de suas rotas feitas
+	 */
+	public String relatorioRotas(String placa) { // Adicionar exceção se um veículo não possui rotas
+		StringBuilder relatorio = new StringBuilder();
+
+		if (quantRotas > 0) {
+			for (Rota rota : rotas) {
+				if (rota != null) {
+					relatorio.append(rota.relatorio(placa));
+				}
+			}
+		} else {
+
+			relatorio.append("Veículo não possui rotas.\n");
+		}
+
+		return relatorio.toString();
+	}
+
+	/*
+	 * Método responsável por gerar relatórios das manutenções realizadas de cada
+	 * veículo,
+	 * tendo como identificador sua placa.
+	 * 
+	 * @return String com as informações de relatório dos veículos indicados pela
+	 * placa
+	 */
+	public String relatorioManutencao() {
+		StringBuilder aux = new StringBuilder();
+		String base = "O veiculo de placa";
+		listaManutencao.stream()
+				.forEach(m -> aux.append(base + this.placa + " " + m.relatorioManutencao()));
+		return aux.toString();
+	}
+
+	/*
+	 * Método responsável por calcular o gasto total de cada de cada veículo.
+	 *
+	 * @return cálculo que envolve o valor total gasto com manutenções somado ao valor
+	 * gasto com combustível.
+	 */
+	public double gastoTotal() {
+		double soma = 0;
+		soma = listaManutencao.stream()
+				.mapToDouble(m -> m.getValor())
+				.sum();
+
+		return (tanque.calcularPreco(kmTotal) + soma);
+	}
+
+	/*
+	 * Método que realiza o cáluclo da quilometragem média realizada por um veículo
+	 * 
+	 * @return o valor médio de quilômetros
+	 */
+
+	public double mediakm() {
+		double soma = 0;
+		for (Rota rota : rotas) {
+			if (rota != null) {
+				soma += rota.getQuilometragem();
+			}
+		}
+		return (soma / quantRotas);
+	}
+
+	/**
+	 * Método que definie o valor inicial das manutenções a serem feitas com base
+	 * nos valores máximos do enumerador EMaxManutencoes
+	 * 
+	 * @param tipo tipo de manutenção para ter o valor inicial associado à variável
+	 */
+	public void setManutencoesIniciais(EMaxManutencoes tipo) {
+		kmProxManutencaoPreventiva = tipo.maxKm;
+		kmProxManutencaoPecas = tipo.maxPecas;
+	}
+
+	@Override
+	public String toString() {
+		DecimalFormat formato = new DecimalFormat("0.00");
+
+		return "\n" +
+
+				"Veiculo Placa: " + placa + "\n" +
+				"Total Reabastecido: " + formato.format(totalReabastecido) + "\n" +
+				"KM Total: " + formato.format(kmTotal) + "\n" +
+				"KM No Mês Atual: " + formato.format(kmMes) + "\n" +
+				" ------------------ " + "\n";
+	}
 	// #endregion
 
 	// #region Getters Setters
@@ -223,69 +309,5 @@ public abstract class  Veiculo {
 		this.quantRotas = quantRotas;
 	}
 
-	@Override
-	public String toString() {
-		DecimalFormat formato = new DecimalFormat("0.00");
-
-		return "\n" +
-
-				"Veiculo Placa: " + placa + "\n" +
-				"Total Reabastecido: " + formato.format(totalReabastecido) + "\n" +
-				"KM Total: " + formato.format(kmTotal) + "\n" +
-				"KM No Mês Atual: " + formato.format(kmMes) + "\n" +
-				" ------------------ " + "\n";
-	}
-
-	public String relatorioRotas(String placa) {
-		 StringBuilder relatorio = new StringBuilder();
-
-		if (quantRotas > 0) {
-			for (Rota rota : rotas) {
-				if(rota != null){
-				    relatorio.append(rota.relatorio(placa));
-				}
-			}
-		} else {
-			
-			relatorio.append("Veículo não possui rotas.\n");
-		}
-
-		return relatorio.toString();
-	}
-
-//Como melhorar esse método?
-	public String relatorioManutencao(){
-		StringBuilder aux = new StringBuilder();
-		String base = "O veiculo de placa";
-		 listaManutencao.stream()
-		 .forEach(m -> aux.append(base+this.placa+" "+m.relatorioManutencao()));
-		 return aux.toString();
-	}
-
-	//Melhorar este método
-	public double gastoTotal(){
-		double soma =0;
-		for(Manutencao m: listaManutencao){
-			soma+=m.getValor();
-		}
-		return (tanque.calcularPreco(kmTotal)+soma);
-	}
-
-	//Melhorar este método
-	public double mediakm(){
-		double soma =0;
-		for (Rota rota : rotas) {
-			if(rota!=null){
-				soma+=rota.getQuilometragem();
-			}
-		}
-		return (soma/quantRotas);
-	}
-
-	public void setManutencoesIniciais(EMaxManutencoes tipo2) {
-		kmProxManutencaoPreventiva=tipo2.maxKm;
-		kmProxManutencaoPecas=tipo2.maxPecas;
-    }
-		
+	// #endregion
 }
-

@@ -108,8 +108,7 @@ public class Tanque {
 	{
 		double litrosPrecisam = km/CONSUMO;
 		
-		double litrosFaltando = litrosPrecisam-capacidadeAtual;
-		return litrosFaltando;
+		return litrosPrecisam-capacidadeAtual;
 	}
 
 	public void atualizarTanque (double km)
