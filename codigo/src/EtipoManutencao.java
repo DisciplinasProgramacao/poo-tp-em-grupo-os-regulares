@@ -1,3 +1,4 @@
+package src;
 enum ETipoManutencao {
     PERIODICA("periodica",150d),
     PECAS("pecas",200d);

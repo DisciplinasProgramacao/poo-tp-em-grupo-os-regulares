@@ -1,3 +1,4 @@
+package src;
 public class Manutencao{
     private double km;
     private ETipoManutencao tipoManutencao;

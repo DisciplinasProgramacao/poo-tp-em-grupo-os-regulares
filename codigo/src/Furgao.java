@@ -1,11 +1,11 @@
-public class Carro extends Veiculo{
-    
-    private static final int CAPACIDADE_TANQUE = 50;
+package src;
+public class Furgao extends Veiculo {
+    private static final int CAPACIDADE_TANQUE = 80;
     private EMaxManutencoes tipo;
 
-    public Carro(String placa, COMBUSTIVEL tipoCombustivel) {
+    public Furgao(String placa, COMBUSTIVEL tipoCombustivel) {
         super(placa, CAPACIDADE_TANQUE, tipoCombustivel);
-        this.tipo = EMaxManutencoes.CARRO;
+        this.tipo = EMaxManutencoes.FURGAO;
         this.setManutencoesIniciais(this.tipo);
     }
 

@@ -1,3 +1,4 @@
+package src;
 enum EMaxManutencoes{
    VAN(10_000,12_000),
    CAMINHAO(10_000,10_000),

@@ -1,4 +1,7 @@
+package src;
 import java.util.Scanner;
+
+import Util.Data;
 
 public class App {
   public static void main(String[] args) {

@@ -1,3 +1,4 @@
+package src;
 enum COMBUSTIVEL {
     ALCCOL(7.0,3.29),
     GASOLINA(10.0,5.19),
