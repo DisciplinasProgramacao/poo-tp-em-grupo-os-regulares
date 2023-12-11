@@ -69,6 +69,7 @@ public class AppMenu {
     //#endregion
 
 
+    // Método para criar uma nova frota
     public static void criarFrota() {
       teclado = new Scanner(System.in);
 
@@ -84,6 +85,10 @@ public class AppMenu {
       System.out.println("Frota criada com sucesso!\n Código da Frota: " + codigoFrota);
     }
 
+    /**
+     * Método para gerar código.
+     * @return Um código aleatório
+     */
     public static String gerarCodigoAleatorio() {
         // Gera dois números aleatórios entre 0 e 9
         int numero1 = gerarNumeroAleatorio(0, 9);
@@ -98,6 +103,11 @@ public class AppMenu {
         return codigoAleatorio;
     }
 
+    /**
+     * Consome combustível
+     * @return qual tipo de combustível será consumido
+     * @throws FileNotFoundException
+     */
     public static COMBUSTIVEL coletaCombustivel() throws FileNotFoundException{
         teclado = new Scanner(System.in);
 
@@ -119,6 +129,10 @@ public class AppMenu {
     }
 
 
+    /**
+     * Adiciona veículo na frota 
+     * @throws FileNotFoundException
+     */
     public static void adicionarVeiculoFrota() throws FileNotFoundException {
       teclado = new Scanner(System.in);
 
@@ -166,11 +180,22 @@ public class AppMenu {
     }
   }
 
+  /**
+   * Gerador de número aleatório
+   * @param min número base
+   * @param max número limite
+   * @return
+   */
     private static int gerarNumeroAleatorio(int min, int max) {
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     * Gerador de String
+     * @param quantidade tamanho da String
+     * @return String com caractéres aleatórios
+     */
     private static String gerarLetrasAleatorias(int quantidade) {
         Random random = new Random();
         StringBuilder letras = new StringBuilder();
@@ -183,6 +208,10 @@ public class AppMenu {
         return letras.toString();
     }
 
+    /**
+     * Abre o arquivo do menu de frotas, podendo criar uma nova frota ou adicionar um veículo.
+     * @throws FileNotFoundException
+     */
     public static void gerenciamentoFrota() throws FileNotFoundException {
         teclado = new Scanner(System.in);
         String nomeArq = "/Users/avenueeco-caio/Documents/poo-os-regulares/poo-tp-em-grupo-os-regulares/codigo/menuFrota";
