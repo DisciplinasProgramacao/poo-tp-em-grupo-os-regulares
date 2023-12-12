@@ -1,20 +1,24 @@
 package src;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.stream.Collectors;
+import Util.Data;
 
 public class AppMenu {
 
-  static Scanner teclado;
-  static Map<String,Frota> frotas;
+    static Scanner teclado;
+    static Map<String, Frota> frotas;
+    static Map<String, Rota> rotasDisponiveis;
 
-  //#region utilidades
-    
-     /**
+    // #region utilidades
+
+    /**
      * "Limpa" a tela (códigos de terminal VT-100)
      */
     public static void limparTela() {
@@ -22,7 +26,7 @@ public class AppMenu {
         System.out.flush();
     }
 
-     /**
+    /**
      * Pausa para leitura de mensagens em console
      * 
      * @param teclado Scanner de leitura
@@ -33,18 +37,22 @@ public class AppMenu {
     }
 
     /**
-     * Encapsula uma leitura de teclado, com mensagem personalizada. A mensagem sempre é completada com ":". Retorna uma string 
+     * Encapsula uma leitura de teclado, com mensagem personalizada. A mensagem
+     * sempre é completada com ":". Retorna uma string
      * que pode ser posteriormente convertida.
+     * 
      * @param mensagem A mensagem a ser exibida, sem pontuação final.
      * @return String lida do usuário.
      */
-    public static String leitura(String mensagem){
-        System.out.print(mensagem+": ");
+    public static String leitura(String mensagem) {
+        System.out.print(mensagem + ": ");
         return teclado.nextLine();
     }
 
     /**
-     * Método para montagem de menu. Lê as opções de um arquivo e as numera automaticamente a partir de 1.
+     * Método para montagem de menu. Lê as opções de um arquivo e as numera
+     * automaticamente a partir de 1.
+     * 
      * @param nomeArquivo Nome do arquivo texto com as opções (uma por linha)
      * @return Opção do usuário (int)
      * @throws FileNotFoundException em caso de arquivo não encontrado.
@@ -56,7 +64,7 @@ public class AppMenu {
         System.out.println(leitor.nextLine());
         System.out.println("==========================");
         int contador = 1;
-        while(leitor.hasNextLine()){
+        while (leitor.hasNextLine()) {
             System.out.println(contador + " - " + leitor.nextLine());
             contador++;
         }
@@ -66,22 +74,21 @@ public class AppMenu {
         leitor.close();
         return opcao;
     }
-    //#endregion
-
+    // #endregion
 
     public static void criarFrota() {
-      teclado = new Scanner(System.in);
+        teclado = new Scanner(System.in);
 
-      System.out.println("Digite o tamanho da frota");
+        System.out.println("Digite o tamanho da frota (Quantidade de veículos): ");
 
-      int tamanhoFrota = Integer.parseInt(teclado.nextLine());
+        int tamanhoFrota = Integer.parseInt(teclado.nextLine());
 
-      Frota frota = new Frota(tamanhoFrota);
-      String codigoFrota = gerarCodigoAleatorio();
+        Frota frota = new Frota(tamanhoFrota);
+        String codigoFrota = gerarCodigoAleatorio();
 
-      frotas.put(codigoFrota, frota);
+        frotas.put(codigoFrota, frota);
 
-      System.out.println("Frota criada com sucesso!\n Código da Frota: " + codigoFrota);
+        System.out.println("Frota criada com sucesso!\nCódigo da Frota: " + codigoFrota);
     }
 
     public static String gerarCodigoAleatorio() {
@@ -98,14 +105,14 @@ public class AppMenu {
         return codigoAleatorio;
     }
 
-    public static COMBUSTIVEL coletaCombustivel() throws FileNotFoundException{
+    public static COMBUSTIVEL coletaCombustivel() throws FileNotFoundException {
         teclado = new Scanner(System.in);
 
-        String nomeArq = "/Users/avenueeco-caio/Documents/poo-os-regulares/poo-tp-em-grupo-os-regulares/codigo/menuCombustiveis";
+        String nomeArq = "menuCombustiveis";
         limparTela();
         int opcao = menu(nomeArq);
 
-        switch(opcao){
+        switch (opcao) {
             case 1:
                 return COMBUSTIVEL.ALCCOL;
             case 2:
@@ -118,18 +125,38 @@ public class AppMenu {
 
     }
 
+    public static String selecionarFrota() {
+
+        teclado = new Scanner(System.in);
+
+        System.out.println("FROTAS DISPONIVEIS:");
+        List<String> keysList = new ArrayList<>(frotas.keySet());
+        StringBuilder aux = new StringBuilder();
+
+        keysList.stream().forEach(key -> aux.append(key + " " + "\n"));
+        System.out.println(aux.toString());
+
+        System.out.println("\nDigite o código da frota:");
+
+        String codigoFrota = teclado.nextLine();
+
+        if (frotas.containsKey(codigoFrota)) {
+            return codigoFrota;
+        } else {
+            System.out.println("Frota inexistente!");
+            return selecionarFrota();
+        }
+    }
 
     public static void adicionarVeiculoFrota() throws FileNotFoundException {
-      teclado = new Scanner(System.in);
+        teclado = new Scanner(System.in);
 
-      System.out.println("Digite o código da frota:");
-
-      String codigoFrota = teclado.nextLine();
-
-      if(frotas.containsKey(codigoFrota)){
+        String codigoFrota = selecionarFrota();
         Frota frota = frotas.get(codigoFrota);
-        String nomeArq = "/Users/avenueeco-caio/Documents/poo-os-regulares/poo-tp-em-grupo-os-regulares/codigo/menuVeiculos";
+        String nomeArq = "menuVeiculos";
+
         limparTela();
+
         int opcao = menu(nomeArq);
         Veiculo veiculo;
 
@@ -138,33 +165,217 @@ public class AppMenu {
         String placa = teclado.nextLine();
 
         COMBUSTIVEL combustivel = coletaCombustivel();
-        
-        switch(opcao){
+
+        switch (opcao) {
+            case 1:
+                veiculo = new Carro(placa, combustivel);
+                addFrota(veiculo, frota);
+                pausa();
+                break;
+            case 2:
+                veiculo = new Caminhao(placa, combustivel);
+                addFrota(veiculo, frota);
+                break;
+            case 3:
+                veiculo = new Furgao(placa, combustivel);
+                addFrota(veiculo, frota);
+                break;
+            case 4:
+                veiculo = new Van(placa, combustivel);
+                addFrota(veiculo, frota);
+                break;
+            default:
+                System.out.println("Opcão inválida");
+                break;
+        }
+    }
+
+    /*
+     * public static void relatoriosVeiculo(Frota frota) throws
+     * FileNotFoundException {
+     * teclado = new Scanner(System.in);
+     * String nomeArq = "menuRelatoriosVeiculos";
+     * int opcao = -1;
+     * while (opcao != 0) {
+     * limparTela();
+     * opcao = menu(nomeArq);
+     * 
+     * switch (opcao) {
+     * case 0:
+     * System.out.println("");
+     * break;
+     * case 1:
+     * System.out.println(frota.relatorioRotas() + "\n");
+     * pausa();
+     * break;
+     * case 2:
+     * System.out.println(frota.relatorioManutencao() + "\n");
+     * pausa();
+     * break;
+     * case 3:
+     * System.out.println(frota.gastosTotais() + "\n");
+     * pausa();
+     * break;
+     * default:
+     * System.out.println("Opcão inválida");
+     * break;
+     * }
+     * }
+     * }
+     */
+    public static void relatoriosFrota(Frota frota) throws FileNotFoundException {
+        teclado = new Scanner(System.in);
+        String nomeArq = "menuRelatoriosFrotas";
+        int opcao = -1;
+        while (opcao != 0) {
+            limparTela();
+            opcao = menu(nomeArq);
+            switch (opcao) {
+                case 0:
+                    System.out.println("");
+                    break;
                 case 1:
-                    veiculo = new Carro(placa, combustivel);
+                    System.out.println(frota.relatorioGeralFrota());
                     pausa();
                     break;
                 case 2:
-                    veiculo = new Caminhao(placa, combustivel);
+                    System.out.println(frota.relatorioManutencao() + "\n");
+                    pausa();
                     break;
                 case 3:
-                    veiculo = new Furgao(placa, combustivel);
+                    System.out.println("O veículo com maior quilometragem é: " + frota.maiorKmTotal());
+                    pausa();
                     break;
                 case 4:
-                    veiculo = new Van(placa, combustivel);
+                    System.out.println("O veículo com maior quilometragem média é: " + frota.maiorKmMedia());
+                    pausa();
                     break;
+
+                case 5:
+                    System.out.println("A quilometragem total da frota é de: " + frota.quilometragemTotal() + " km");
+                    pausa();
+                    break;
+
+                case 6:
+                    System.out.println(frota.gastosTotais());
+                    pausa();
+                    break;
+
+                case 7:
+                    System.out.println(frota.relatorioFrota());
+                    pausa();
+                    break;
+
                 default:
                     System.out.println("Opcão inválida");
                     break;
             }
-        
-
-
-      
-    }else{
-        System.out.println("Frota inexistente");
+        }
     }
-  }
+
+    public static String selecionarRota() {
+
+        teclado = new Scanner(System.in);
+
+        System.out.println("ROTAS DISPONIVEIS:");
+        StringBuilder aux = new StringBuilder();
+
+        rotasDisponiveis.forEach((codigo, rota) -> {
+            aux.append(codigo + ":" + rota.toString() + "\n");
+        });
+
+        System.out.println(aux.toString());
+
+        System.out.println("\nDigite o código da rota:");
+
+        String codigoRota = teclado.nextLine();
+
+        if (rotasDisponiveis.containsKey(codigoRota)) {
+            return codigoRota;
+        } else {
+            System.out.println("Rota inexistente!");
+            return selecionarRota();
+        }
+    }
+
+    public static void adicionarRotaVeiculo() {
+        teclado = new Scanner(System.in);
+
+        String codigoFrota = selecionarFrota();
+        Frota frota = frotas.get(codigoFrota);
+
+        System.out.println("Veiculos disponíveis:");
+
+        frota.getPlacasVeiculo().stream().forEach(placa -> System.out.println(placa));
+
+        System.out.println("Digite a placa do veículo: ");
+
+        String placa = teclado.nextLine();
+
+        Veiculo veiculo = frota.getVeiculo(placa);
+
+        String codRota = selecionarRota();
+
+        if (veiculo != null) {
+            if (veiculo.addRota(rotasDisponiveis.get(codRota))) {
+                System.out.println("Rota adicionada com sucesso!");
+                rotasDisponiveis.remove(codRota);
+                pausa();
+            } else {
+                System.out.println("Não foi possível adicionar rota!");
+                pausa();
+            }
+        }
+    }
+
+    public static void menuRelatorios() throws FileNotFoundException {
+        teclado = new Scanner(System.in);
+        String nomeArq = "menuRelatorios";
+        String codigoFrota;
+        Frota frota;
+        int opcao = -1;
+        while (opcao != 0) {
+            limparTela();
+            opcao = menu(nomeArq);
+
+            switch (opcao) {
+                case 0:
+                    System.out.println("");
+                    break;
+                case 1:
+                    codigoFrota = selecionarFrota();
+                    frota = frotas.get(codigoFrota);
+                    relatoriosFrota(frota);
+                    pausa();
+                    break;
+                /*
+                 * case 2:
+                 * codigoFrota = selecionarFrota();
+                 * frota = frotas.get(codigoFrota);
+                 * relatoriosVeiculo(frota);
+                 * pausa();
+                 * break;
+                 */
+                default:
+                    System.out.println("Opcão inválida");
+                    break;
+            }
+        }
+    }
+
+    public static void addFrota(Veiculo veiculo, Frota frota) {
+        frota.adicionarVeiculo(veiculo);
+    }
+
+    public static Rota gerarRotaAleatoria() {
+        Random random = new Random();
+        double distancia = random.nextDouble() * 500.0;
+        int dia = random.nextInt(28) + 1;
+        int mes = random.nextInt(12)+1;
+        int ano = 2023;
+
+        return new Rota(distancia, new Data(dia, mes, ano));
+    }
 
     private static int gerarNumeroAleatorio(int min, int max) {
         Random random = new Random();
@@ -185,12 +396,12 @@ public class AppMenu {
 
     public static void gerenciamentoFrota() throws FileNotFoundException {
         teclado = new Scanner(System.in);
-        String nomeArq = "/Users/avenueeco-caio/Documents/poo-os-regulares/poo-tp-em-grupo-os-regulares/codigo/menuFrota";
+        String nomeArq = "menuFrota";
         int opcao = -1;
-        while(opcao!=0){
-          limparTela();
-          opcao = menu(nomeArq);
-          switch(opcao){
+        while (opcao != 0) {
+            limparTela();
+            opcao = menu(nomeArq);
+            switch (opcao) {
                 case 0:
                     System.out.println("");
                     break;
@@ -201,21 +412,126 @@ public class AppMenu {
                 case 2:
                     adicionarVeiculoFrota();
                     break;
+                // case 3:
+                //     gerarRotaAleatoria(escolherMes());
+                //     break;
+                case 3:
+                    adicionarRotaVeiculo();
+                    break;
                 default:
                     System.out.println("Opcão inválida");
                     break;
             }
         }
     }
-  public static void main(String[] args) throws FileNotFoundException {
+
+    public static int escolherMes() {
+        int op;
+
+        System.out.println("Escolha o mes para gerar a sua rota: ");
+
+        System.out.println("1 - Janeiro");
+        System.out.println("2 - Fevereiro");
+        System.out.println("3 - Março");
+        System.out.println("4 - Abril");
+        System.out.println("5 - Maio");
+        System.out.println("6 - Junho");
+        System.out.println("7 - Julho");
+        System.out.println("8 - Agosto");
+        System.out.println("9 - Setembro");
+        System.out.println("10 - Outubro");
+        System.out.println("11 - Novembro");
+        System.out.println("12 - Dezembro");
+
+        op = teclado.nextInt();
+
+        return (op);
+
+    }
+
+    public static Frota criar() {
+        Frota frota = new Frota(5);
+
+        // Criando alguns veículos e adicionando-os à frota
+        Veiculo veiculo1 = new Carro("ABC1234", COMBUSTIVEL.ALCCOL);
+        Veiculo veiculo2 = new Caminhao("DEF5678", COMBUSTIVEL.DIESEL);
+        Veiculo veiculo3 = new Van("GHI9012", COMBUSTIVEL.GASOLINA);
+        Veiculo veiculo4 = new Furgao("JKL3456", COMBUSTIVEL.GASOLINA);
+
+        frota.adicionarVeiculo(veiculo1);
+        frota.adicionarVeiculo(veiculo2);
+        frota.adicionarVeiculo(veiculo3);
+        frota.adicionarVeiculo(veiculo4);
+
+        //Criando algumas rotas para os veículos
+        Rota rota1 = new Rota(3500.0, new Data(10, 1, 2023));
+        Rota rota2 = new Rota(750.0, new Data(15, 1, 2023));
+        Rota rota3 = new Rota(200.0, new Data(20, 1, 2023));
+        Rota rota4 = new Rota(120.0, new Data(12, 1, 2023));
+
+        Rota r1 = new Rota(150.0, new Data(2, 1, 2023));
+        Rota r2 = new Rota(225.0, new Data(5, 1, 2023));
+        Rota r11 = new Rota(226.0, new Data(2, 1, 2023));
+        Rota r22 = new Rota(227.0, new Data(5, 1, 2023));
+        Rota r3 = new Rota(228.0, new Data(7, 1, 2023));
+        Rota r4 = new Rota(751.0, new Data(2, 1, 2023));
+
+        Rota t1 = new Rota(110.0, new Data(12, 2, 2023));
+        Rota t2 = new Rota(300.0, new Data(27, 2, 2023));
+        Rota t3 = new Rota(305.0, new Data(30, 2, 2023));
+        Rota t4 = new Rota(102.0, new Data(30, 2, 2023));
+        Rota t5 = new Rota(129.0, new Data(13, 2, 2023));
+
+        veiculo1.addRota(rota1);
+        veiculo1.addRota(rota1);
+        veiculo1.addRota(rota2);
+        veiculo1.addRota(rota3);
+        veiculo1.addRota(r1);
+        veiculo1.addRota(r2);
+        veiculo1.addRota(r3);
+        veiculo1.addRota(r4);
+        veiculo1.addRota(r11);
+        veiculo1.addRota(r22);
+        veiculo1.addRota(r4);
+
+        veiculo2.addRota(r1);
+        veiculo2.addRota(r2);
+        veiculo2.addRota(r11);
+        veiculo2.addRota(r22);
+        veiculo2.addRota(r3);
+
+        veiculo3.addRota(t1);
+        veiculo3.addRota(t2);
+        veiculo3.addRota(t3);
+        veiculo3.addRota(t4);
+
+        veiculo4.addRota(rota4);
+        veiculo4.addRota(r4);
+        veiculo4.addRota(t5);
+        veiculo4.addRota(r1);
+
+        return frota;
+    }
+    public static void adicionarRotaAleatoria(){
+        for (int i = 0; i < 50; i++) {
+            rotasDisponiveis.put(gerarCodigoAleatorio(), gerarRotaAleatoria());
+        }
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
         frotas = new HashMap<>();
+        rotasDisponiveis = new HashMap<>();
         teclado = new Scanner(System.in);
-        String nomeArq = "/Users/avenueeco-caio/Documents/poo-os-regulares/poo-tp-em-grupo-os-regulares/codigo/menuPrincipal";
+        String nomeArq = "menuPrincipal";
         int opcao = -1;
-        while(opcao!=0){
+
+        adicionarRotaAleatoria();
+        frotas.put("#22ABC", criar());
+
+        while (opcao != 0) {
             limparTela();
             opcao = menu(nomeArq);
-            switch(opcao){
+            switch (opcao) {
                 case 0:
                     System.out.println("Saindo aqui, bjs...");
                     break;
@@ -224,13 +540,13 @@ public class AppMenu {
                     pausa();
                     break;
                 case 2:
-                    System.out.println("Opcão 2");
+                    menuRelatorios();
                     break;
                 default:
                     System.out.println("Opcão inválida");
                     break;
             }
 
-          }
         }
+    }
 }

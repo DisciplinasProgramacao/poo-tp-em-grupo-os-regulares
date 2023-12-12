@@ -32,7 +32,7 @@ public class Tanque {
 	public double abastecer (double litros) 
 	{
 
-		double volumeFuturo=capacidadeAtual+litros;
+		double volumeFuturo = capacidadeAtual+litros;
 
 		double valorAbastecido;
 

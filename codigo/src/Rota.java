@@ -1,5 +1,7 @@
 package src;
 
+import java.text.DecimalFormat;
+
 import Util.Data;
 public class Rota {
 	//#region atributos
@@ -46,6 +48,13 @@ public class Rota {
 
 	public void setData(Data data) {
 		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		DecimalFormat formato = new DecimalFormat("0.00");
+		
+		return "Rota [quilometragem= " + formato.format(quilometragem) + ", data=" + data.dataFormatada() + "]";
 	}
 
 	//endregion

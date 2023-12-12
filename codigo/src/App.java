@@ -22,10 +22,10 @@ public class App {
     frota.adicionarVeiculo(veiculo4);
 
     // Criando algumas rotas para os veículos
-    Rota rota1 = new Rota(75.0, new Data(10, 1, 2023));
+    Rota rota1 = new Rota(7500.0, new Data(10, 1, 2023));
     Rota rota2 = new Rota(75.0, new Data(15, 1, 2023));
-    Rota rota3 = new Rota(200.0, new Data(20, 1, 2023));
-    Rota rota4 = new Rota(125.0, new Data(12, 1, 2023));
+    Rota rota3 = new Rota(2000.0, new Data(20, 1, 2023));
+    Rota rota4 = new Rota(1250.0, new Data(12, 1, 2023));
 
     Rota r1 = new Rota(150.0, new Data(2, 2, 2023));
     Rota r2 = new Rota(200.0, new Data(5, 3, 2023));

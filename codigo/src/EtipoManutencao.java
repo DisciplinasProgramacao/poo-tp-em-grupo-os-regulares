@@ -1,16 +1,20 @@
 package src;
+
 enum ETipoManutencao {
-    PERIODICA("periodica",150d),
-    PECAS("pecas",200d);
+    PERIODICA("periodica", 150d),
+    PECAS("pecas", 200d);
 
-     String descricao ;
-     double valor;
+    String descricao;
+    double valor;
 
-    ETipoManutencao(String d, double v){
+    // #region construtor
+    ETipoManutencao(String d, double v) {
         this.descricao = d;
-        this.valor =  v; 
+        this.valor = v;
     }
+    // #endregion
 
+    // #region Getters
     public String getDescricao() {
         return descricao;
     }
@@ -18,6 +22,6 @@ enum ETipoManutencao {
     public double getValor() {
         return valor;
     }
+    // #endregion
 
-    
 }
