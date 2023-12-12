@@ -107,7 +107,7 @@ public abstract class Veiculo {
 	 * @param rota a ser adicionada
 	 * @return TRUE se a rota foi adicionada, FALSE caso contrário
 	 */
-	public boolean addRota(Rota rota) {
+	public boolean addRota(Rota rota){
 		boolean adicionada = false;
 
 		if (verificaRota(rota)) {
@@ -131,12 +131,12 @@ public abstract class Veiculo {
 		if (this.kmProxManutencaoPreventiva <= this.kmTotal) {
 			listaManutencao.add(new Manutencao(this.kmTotal, "preventiva"));
 			this.kmProxManutencaoPreventiva = this.gerarNovaManutencaoPreventiva();
-			System.out.println("Gerou manutenção preventiva");
+			
 		}
 		if (this.kmProxManutencaoPecas <= this.kmTotal) {
 			listaManutencao.add(new Manutencao(this.kmTotal, "pecas"));
 			this.kmProxManutencaoPecas = this.gerarNovaManutencaoPecas();
-			System.out.println("Gerou manutenção de pecas");
+			
 		}
 	}
 
@@ -197,32 +197,6 @@ public abstract class Veiculo {
 		tanque.atualizarTanque(kmDaRota);
 	}
 
-	/*
-	 * Método responsável por gerar um relatório de rotas para um veículo com base
-	 * na placa fornecida.
-	 * 
-	 * @param placa identificador do veículo
-	 * 
-	 * @return Se o veículo possuir rotas, retorna o relatório de suas rotas feitas
-	 */
-	public String relatorioRotas(String placa) {
-
-		StringBuilder relatorio = new StringBuilder();
-
-		
-		if (quantRotas > 0) {
-			for (Rota rota : rotas) {
-				if (rota != null) {
-					relatorio.append(rota.relatorio(placa));
-				}
-			}
-		} else {
-
-			relatorio.append("Veículo não possui rotas.\n");
-		}
-
-		return relatorio.toString();
-	}
 
 	/*
 	 * Método que retona todo o histórico de todas as rotas já feitas por um veículo

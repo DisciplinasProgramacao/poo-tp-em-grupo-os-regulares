@@ -3,7 +3,6 @@ package src;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Frota {
@@ -71,9 +70,9 @@ public class Frota {
 
 		try {
 
-			boolean placaExistente = veiculos.stream().anyMatch(v -> v.getPlaca().equalsIgnoreCase(add.getPlaca()));
+			//boolean placaExistente = veiculos.stream().anyMatch(v -> v.getPlaca().equalsIgnoreCase(add.getPlaca()));
 
-			if (placaExistente) {
+			if (localizarVeiculo(add.getPlaca())!=null) {
 				throw new IllegalArgumentException("Erro ao adicionar: Veículo com a mesma placa já existe na frota");
 			}
 
@@ -100,9 +99,10 @@ public class Frota {
 	 */
 	public Veiculo localizarVeiculo(String placa) throws NoSuchElementException {
 		Veiculo atual;
+
 		try {
 			atual = veiculos.stream()
-					.filter(v -> v.getPlaca().equals(placa))
+					.filter(v -> v.getPlaca().equalsIgnoreCase(placa))
 					.findFirst().orElseThrow(NoSuchElementException::new);
 
 			return atual;
@@ -153,20 +153,6 @@ public class Frota {
 				.get();
 
 		return aux.getPlaca();
-	}
-
-	/**
-	 * Método que percorre a lista de veículos da frota e concatena na String "aux",
-	 * seus relatórios correspondentes
-	 * 
-	 * @return o relatório de rotas de cada veículo com a referência de sua placa
-	 */
-	public String relatorioRotas() {
-
-		StringBuilder aux = new StringBuilder();
-		veiculos.stream()
-				.forEach(v -> aux.append(v.relatorioRotas(v.getPlaca())));
-		return aux.toString();
 	}
 
 	/**

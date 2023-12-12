@@ -3,7 +3,7 @@ package src;
 public class Carro extends Veiculo {
 
     // #region atributos
-    private static final int CAPACIDADE_TANQUE = 50;
+    private static final int CAPACIDADE_TANQUE = 500;
     private EMaxManutencoes tipo;
     // #endregion
 

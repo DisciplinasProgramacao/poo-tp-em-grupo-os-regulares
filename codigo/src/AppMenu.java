@@ -12,7 +12,7 @@ import Util.Data;
 
 public class AppMenu {
 
-    static Scanner teclado;
+    static Scanner teclado = new Scanner(System.in);
     static Map<String, Frota> frotas;
     static Map<String, Rota> rotasDisponiveis;
 
@@ -74,10 +74,17 @@ public class AppMenu {
         leitor.close();
         return opcao;
     }
-    // #endregion
 
+    // #endregion
+    /**
+     * Método que permite a criação de uma nova frota com o tamanho desejado,
+     * chama o método de gerar cógido e atribui o mesmo a ela ao adicionar como
+     * chave
+     * no Map de frotas.
+     * 
+     */
     public static void criarFrota() {
-        teclado = new Scanner(System.in);
+        // teclado = new Scanner(System.in);
 
         System.out.println("Digite o tamanho da frota (Quantidade de veículos): ");
 
@@ -91,6 +98,12 @@ public class AppMenu {
         System.out.println("Frota criada com sucesso!\nCódigo da Frota: " + codigoFrota);
     }
 
+    /**
+     * método que gera códigos aleatórios que seram atribuídos como chave no Map
+     * frotas
+     * 
+     * @return código aleatório
+     */
     public static String gerarCodigoAleatorio() {
         // Gera dois números aleatórios entre 0 e 9
         int numero1 = gerarNumeroAleatorio(0, 9);
@@ -105,6 +118,13 @@ public class AppMenu {
         return codigoAleatorio;
     }
 
+    /**
+     * método que fornece o menu de Combustíveis disponíveis para a criação de novo
+     * veículo
+     * 
+     * @return tipo combustível escolhido
+     * @throws FileNotFoundException arquivo não encontrado
+     */
     public static COMBUSTIVEL coletaCombustivel() throws FileNotFoundException {
         teclado = new Scanner(System.in);
 
@@ -122,9 +142,14 @@ public class AppMenu {
             default:
                 return COMBUSTIVEL.GASOLINA;
         }
-
     }
 
+    /**
+     * método que permite selecionar a frota que deseja exbindo as chaves disponíves
+     * no Map de frotas.
+     * 
+     * @return frota escolhida
+     */
     public static String selecionarFrota() {
 
         teclado = new Scanner(System.in);
@@ -148,131 +173,132 @@ public class AppMenu {
         }
     }
 
-    public static void adicionarVeiculoFrota() throws FileNotFoundException {
-        teclado = new Scanner(System.in);
-
-        String codigoFrota = selecionarFrota();
-        Frota frota = frotas.get(codigoFrota);
-        String nomeArq = "menuVeiculos";
-
-        limparTela();
-
-        int opcao = menu(nomeArq);
-        Veiculo veiculo;
-
-        System.out.println("Digite a placa do veículo: ");
-
-        String placa = teclado.nextLine();
-
-        COMBUSTIVEL combustivel = coletaCombustivel();
-
-        switch (opcao) {
-            case 1:
-                veiculo = new Carro(placa, combustivel);
-                addFrota(veiculo, frota);
-                pausa();
-                break;
-            case 2:
-                veiculo = new Caminhao(placa, combustivel);
-                addFrota(veiculo, frota);
-                break;
-            case 3:
-                veiculo = new Furgao(placa, combustivel);
-                addFrota(veiculo, frota);
-                break;
-            case 4:
-                veiculo = new Van(placa, combustivel);
-                addFrota(veiculo, frota);
-                break;
-            default:
-                System.out.println("Opcão inválida");
-                break;
-        }
-    }
-
-    /*
-     * public static void relatoriosVeiculo(Frota frota) throws
-     * FileNotFoundException {
-     * teclado = new Scanner(System.in);
-     * String nomeArq = "menuRelatoriosVeiculos";
-     * int opcao = -1;
-     * while (opcao != 0) {
-     * limparTela();
-     * opcao = menu(nomeArq);
+    /**
+     * método que cria e adiciona novos veículos a uma frota já existente
      * 
-     * switch (opcao) {
-     * case 0:
-     * System.out.println("");
-     * break;
-     * case 1:
-     * System.out.println(frota.relatorioRotas() + "\n");
-     * pausa();
-     * break;
-     * case 2:
-     * System.out.println(frota.relatorioManutencao() + "\n");
-     * pausa();
-     * break;
-     * case 3:
-     * System.out.println(frota.gastosTotais() + "\n");
-     * pausa();
-     * break;
-     * default:
-     * System.out.println("Opcão inválida");
-     * break;
-     * }
-     * }
-     * }
+     * @throws FileNotFoundException aquivo não encontrado
      */
-    public static void relatoriosFrota(Frota frota) throws FileNotFoundException {
-        teclado = new Scanner(System.in);
-        String nomeArq = "menuRelatoriosFrotas";
-        int opcao = -1;
-        while (opcao != 0) {
+    public static void adicionarVeiculoFrota() throws FileNotFoundException {
+
+        try {
+            String codigoFrota = selecionarFrota();
+            Frota frota = frotas.get(codigoFrota);
+            String nomeArq = "menuVeiculos";
+
             limparTela();
-            opcao = menu(nomeArq);
+
+            int opcao = menu(nomeArq);
+            Veiculo veiculo;
+
+            System.out.println("Digite a placa do veículo: ");
+
+            String placa = teclado.nextLine();
+
+            COMBUSTIVEL combustivel = coletaCombustivel();
+
             switch (opcao) {
-                case 0:
-                    System.out.println("");
-                    break;
                 case 1:
-                    System.out.println(frota.relatorioGeralFrota());
+                    veiculo = new Carro(placa, combustivel);
+                    addFrota(veiculo, frota);
                     pausa();
                     break;
                 case 2:
-                    System.out.println(frota.relatorioManutencao() + "\n");
-                    pausa();
+                    veiculo = new Caminhao(placa, combustivel);
+                    addFrota(veiculo, frota);
                     break;
                 case 3:
-                    System.out.println("O veículo com maior quilometragem é: " + frota.maiorKmTotal());
-                    pausa();
+                    veiculo = new Furgao(placa, combustivel);
+                    addFrota(veiculo, frota);
                     break;
                 case 4:
-                    System.out.println("O veículo com maior quilometragem média é: " + frota.maiorKmMedia());
-                    pausa();
+                    veiculo = new Van(placa, combustivel);
+                    addFrota(veiculo, frota);
                     break;
-
-                case 5:
-                    System.out.println("A quilometragem total da frota é de: " + frota.quilometragemTotal() + " km");
-                    pausa();
-                    break;
-
-                case 6:
-                    System.out.println(frota.gastosTotais());
-                    pausa();
-                    break;
-
-                case 7:
-                    System.out.println(frota.relatorioFrota());
-                    pausa();
-                    break;
-
                 default:
                     System.out.println("Opcão inválida");
                     break;
             }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado");
         }
     }
+    
+     /**
+     *  método que adiciona veículo a uma frota
+     * @param veiculo
+     * @param frota
+     */
+    public static void addFrota(Veiculo veiculo, Frota frota) {
+        frota.adicionarVeiculo(veiculo);
+    }
 
+    /**
+     * Exibe relatórios de uma frota
+     * 
+     * @param frota 
+     * @throws FileNotFoundException arquivo não encontrado
+     */
+    public static void relatoriosFrota(Frota frota) throws FileNotFoundException {
+        // teclado = new Scanner(System.in);
+
+        try {
+            String nomeArq = "menuRelatoriosFrotas";
+            int opcao = -1;
+            while (opcao != 0) {
+                limparTela();
+                opcao = menu(nomeArq);
+                switch (opcao) {
+                    case 0:
+                        System.out.println("");
+                        break;
+                    case 1:
+                        System.out.println(frota.relatorioGeralFrota());
+                        pausa();
+                        break;
+                    case 2:
+                        System.out.println(frota.relatorioManutencao() + "\n");
+                        pausa();
+                        break;
+                    case 3:
+                        System.out.println("O veículo com maior quilometragem é: " + frota.maiorKmTotal());
+                        pausa();
+                        break;
+                    case 4:
+                        System.out.println("O veículo com maior quilometragem média é: " + frota.maiorKmMedia());
+                        pausa();
+                        break;
+
+                    case 5:
+                        System.out
+                                .println("A quilometragem total da frota é de: " + frota.quilometragemTotal() + " km");
+                        pausa();
+                        break;
+
+                    case 6:
+                        System.out.println(frota.gastosTotais());
+                        pausa();
+                        break;
+
+                    case 7:
+                        System.out.println(frota.relatorioFrota());
+                        pausa();
+                        break;
+
+                    default:
+                        System.out.println("Opcão inválida");
+                        break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado");
+        }
+
+    }
+
+    /**
+     * Exibe rotas dispoíveis para serem relacionadas a veículos
+     */
     public static String selecionarRota() {
 
         teclado = new Scanner(System.in);
@@ -298,6 +324,9 @@ public class AppMenu {
         }
     }
 
+    /**
+     * método que atribui uma rota a um veículo
+     */
     public static void adicionarRotaVeiculo() {
         teclado = new Scanner(System.in);
 
@@ -327,61 +356,73 @@ public class AppMenu {
             }
         }
     }
-
+    
+    /**
+     * Método responsável por exbir o menu de acesso aos relatórios da frota
+     * @throws FileNotFoundException aquivo não existe
+     */
     public static void menuRelatorios() throws FileNotFoundException {
-        teclado = new Scanner(System.in);
-        String nomeArq = "menuRelatorios";
-        String codigoFrota;
-        Frota frota;
-        int opcao = -1;
-        while (opcao != 0) {
-            limparTela();
-            opcao = menu(nomeArq);
 
-            switch (opcao) {
-                case 0:
-                    System.out.println("");
-                    break;
-                case 1:
-                    codigoFrota = selecionarFrota();
-                    frota = frotas.get(codigoFrota);
-                    relatoriosFrota(frota);
-                    pausa();
-                    break;
-                /*
-                 * case 2:
-                 * codigoFrota = selecionarFrota();
-                 * frota = frotas.get(codigoFrota);
-                 * relatoriosVeiculo(frota);
-                 * pausa();
-                 * break;
-                 */
-                default:
-                    System.out.println("Opcão inválida");
-                    break;
+        try {
+            String nomeArq = "menuRelatorios";
+            String codigoFrota;
+            Frota frota;
+            int opcao = -1;
+            while (opcao != 0) {
+                limparTela();
+                opcao = menu(nomeArq);
+
+                switch (opcao) {
+                    case 0:
+                        System.out.println("");
+                        break;
+                    case 1:
+                        codigoFrota = selecionarFrota();
+                        frota = frotas.get(codigoFrota);
+                        relatoriosFrota(frota);
+                        pausa();
+                        break;
+                    default:
+                        System.out.println("Opcão inválida");
+                        break;
+                }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado");
         }
     }
-
-    public static void addFrota(Veiculo veiculo, Frota frota) {
-        frota.adicionarVeiculo(veiculo);
-    }
-
+    
+    /**
+     *  Método que gera distâncias e datas aleatórias para a criação de novas rotas
+     */
     public static Rota gerarRotaAleatoria() {
         Random random = new Random();
         double distancia = random.nextDouble() * 500.0;
         int dia = random.nextInt(28) + 1;
-        int mes = random.nextInt(12)+1;
+        int mes = random.nextInt(12) + 1;
         int ano = 2023;
 
         return new Rota(distancia, new Data(dia, mes, ano));
     }
 
+    /**
+     * Gerador de número aleatório
+     * 
+     * @param min número base
+     * @param max número limite
+     * @return
+     */
     private static int gerarNumeroAleatorio(int min, int max) {
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     * Gerador de String
+     * 
+     * @param quantidade tamanho da String
+     * @return String com caractéres aleatórios
+     */
     private static String gerarLetrasAleatorias(int quantidade) {
         Random random = new Random();
         StringBuilder letras = new StringBuilder();
@@ -394,6 +435,12 @@ public class AppMenu {
         return letras.toString();
     }
 
+    /**
+     * Abre o arquivo do menu de frotas, podendo criar uma nova frota ou adicionar
+     * um veículo.
+     * 
+     * @throws FileNotFoundException
+     */
     public static void gerenciamentoFrota() throws FileNotFoundException {
         teclado = new Scanner(System.in);
         String nomeArq = "menuFrota";
@@ -412,9 +459,6 @@ public class AppMenu {
                 case 2:
                     adicionarVeiculoFrota();
                     break;
-                // case 3:
-                //     gerarRotaAleatoria(escolherMes());
-                //     break;
                 case 3:
                     adicionarRotaVeiculo();
                     break;
@@ -424,31 +468,8 @@ public class AppMenu {
             }
         }
     }
-
-    public static int escolherMes() {
-        int op;
-
-        System.out.println("Escolha o mes para gerar a sua rota: ");
-
-        System.out.println("1 - Janeiro");
-        System.out.println("2 - Fevereiro");
-        System.out.println("3 - Março");
-        System.out.println("4 - Abril");
-        System.out.println("5 - Maio");
-        System.out.println("6 - Junho");
-        System.out.println("7 - Julho");
-        System.out.println("8 - Agosto");
-        System.out.println("9 - Setembro");
-        System.out.println("10 - Outubro");
-        System.out.println("11 - Novembro");
-        System.out.println("12 - Dezembro");
-
-        op = teclado.nextInt();
-
-        return (op);
-
-    }
-
+    /* Método que cria e adiciona os veículos iniciais à frota inicial
+    */
     public static Frota criar() {
         Frota frota = new Frota(5);
 
@@ -463,7 +484,7 @@ public class AppMenu {
         frota.adicionarVeiculo(veiculo3);
         frota.adicionarVeiculo(veiculo4);
 
-        //Criando algumas rotas para os veículos
+        // Criando algumas rotas para os veículos
         Rota rota1 = new Rota(3500.0, new Data(10, 1, 2023));
         Rota rota2 = new Rota(750.0, new Data(15, 1, 2023));
         Rota rota3 = new Rota(200.0, new Data(20, 1, 2023));
@@ -476,12 +497,13 @@ public class AppMenu {
         Rota r3 = new Rota(228.0, new Data(7, 1, 2023));
         Rota r4 = new Rota(751.0, new Data(2, 1, 2023));
 
-        Rota t1 = new Rota(110.0, new Data(12, 2, 2023));
-        Rota t2 = new Rota(300.0, new Data(27, 2, 2023));
-        Rota t3 = new Rota(305.0, new Data(30, 2, 2023));
-        Rota t4 = new Rota(102.0, new Data(30, 2, 2023));
+        Rota t1 = new Rota(1010.0, new Data(12, 2, 2023));
+        Rota t2 = new Rota(3000.0, new Data(27, 2, 2023));
+        Rota t3 = new Rota(3050.0, new Data(30, 2, 2023));
+        Rota t4 = new Rota(4020.0, new Data(30, 2, 2023));
         Rota t5 = new Rota(129.0, new Data(13, 2, 2023));
 
+        //Adiciona aos veículos
         veiculo1.addRota(rota1);
         veiculo1.addRota(rota1);
         veiculo1.addRota(rota2);
@@ -512,7 +534,11 @@ public class AppMenu {
 
         return frota;
     }
-    public static void adicionarRotaAleatoria(){
+    
+    /**
+     * Método que gera rotas aleatórias que podem ser escolhidas para serem adicionadas aos veículos da frota
+     */
+    public static void adicionarRotaAleatoria() {
         for (int i = 0; i < 50; i++) {
             rotasDisponiveis.put(gerarCodigoAleatorio(), gerarRotaAleatoria());
         }
