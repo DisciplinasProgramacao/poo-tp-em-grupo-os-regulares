@@ -196,10 +196,10 @@ public class Frota {
 	public String gastosTotais() {
 		StringBuilder aux = new StringBuilder();
 
-		String base = "Valor gasto pelo veículo de placa ";
+		String base = "Valor gasto pelo veículo: ";
 
 		veiculos.stream()
-				.forEach(v -> aux.append(base + v.getPlaca() + ":" + "R$" + (v.gastoTotal()) + "\n"));
+				.forEach(v -> aux.append(base +v.relatorioGasto()+"\n"));
 
 		return aux.toString();
 	}

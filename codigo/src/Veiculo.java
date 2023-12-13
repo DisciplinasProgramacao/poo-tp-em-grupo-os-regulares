@@ -241,6 +241,16 @@ public abstract class Veiculo {
 		return (tanque.calcularPreco(kmTotal) + soma);
 	}
 
+	public String relatorioGasto(){
+		String base = getPlaca() + ":\n" +
+		"\tGASTO TOTAL\t R$ "+this.gastoTotal()+"\n"+ 
+		"\tVALOR COMBUSTIVEL\t R$  "+this.tanque.calcularPreco(kmTotal)+"\n"+
+		"\tVALOR MANUTENCAO\t R$  "+listaManutencao.stream()
+				.mapToDouble(m -> m.getValor())
+				.sum();
+		
+		return base;
+	}
 	/*
 	 * Método que realiza o cáluclo da quilometragem média realizada por um veículo
 	 * 
