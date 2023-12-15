@@ -1,3 +1,4 @@
+package src;
 public class Tanque {
 	//#region atributos
 	private double capacidadeMaxima;
@@ -31,7 +32,7 @@ public class Tanque {
 	public double abastecer (double litros) 
 	{
 
-		double volumeFuturo=capacidadeAtual+litros;
+		double volumeFuturo = capacidadeAtual+litros;
 
 		double valorAbastecido;
 
@@ -44,7 +45,6 @@ public class Tanque {
 		}
 		else if(volumeFuturo>capacidadeMaxima)
 		{
-			System.out.println("Impossível abastecer essa quantidade");
 			return 0;
 		}
 		else
@@ -91,7 +91,6 @@ public class Tanque {
 
 		if(autonomiaMaxima()<km)
 		{
-			System.out.println("O veículo não possui autonomia máxima suficiente para realizar a rota.");
 			resposta=false;
 		}
 		else resposta=true;
@@ -108,8 +107,7 @@ public class Tanque {
 	{
 		double litrosPrecisam = km/CONSUMO;
 		
-		double litrosFaltando = litrosPrecisam-capacidadeAtual;
-		return litrosFaltando;
+		return litrosPrecisam-capacidadeAtual;
 	}
 
 	public void atualizarTanque (double km)
@@ -117,11 +115,9 @@ public class Tanque {
 		double valorGasto=km/CONSUMO;
 		capacidadeAtual-=valorGasto;
 	}
-	public void combustivelGasto (double km)
-	{
-		double combustivelGasto = km*CONSUMO;
-		atualizarTanque(combustivelGasto);
-		
+
+	public double calcularPreco(double kmTotal){
+		return (kmTotal*combustivel.getPrecoMedio())/combustivel.getConsumoMedio();
 	}
 
 	public double getCapacidadeMaxima() {
