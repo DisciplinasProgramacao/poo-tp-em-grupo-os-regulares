@@ -66,7 +66,7 @@ public class Frota {
 	 * @throws IllegalStateException    quando a frota já atingiu sua capacidade
 	 *                                  máxima
 	 */
-	public void adicionarVeiculo(Veiculo add) {
+	public void adicionarVeiculo(Veiculo add) throws IllegalArgumentException, IllegalStateException {
 
 		try {
 
@@ -107,7 +107,6 @@ public class Frota {
 
 			return atual;
 		} catch (NoSuchElementException e) {
-			System.out.println(e.getMessage() + " - Placa não encontrada na frota");
 			return null;
 		}
 	}

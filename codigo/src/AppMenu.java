@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
+
+import org.omg.CosNaming.NamingContextPackage.NotFound;
+
 import Util.Data;
 
 public class AppMenu {
@@ -70,7 +74,12 @@ public class AppMenu {
         }
         System.out.println("0 - Sair");
         System.out.print("\nSua opção: ");
-        int opcao = Integer.parseInt(teclado.nextLine());
+        int opcao;
+        try{
+            opcao = Integer.parseInt(teclado.nextLine());
+        }catch(NumberFormatException e){
+            opcao = 100;
+        }
         leitor.close();
         return opcao;
     }
@@ -88,14 +97,18 @@ public class AppMenu {
 
         System.out.println("Digite o tamanho da frota (Quantidade de veículos): ");
 
-        int tamanhoFrota = Integer.parseInt(teclado.nextLine());
+        try{
+            int tamanhoFrota = Integer.parseInt(teclado.nextLine());
+            Frota frota = new Frota(tamanhoFrota);
+            String codigoFrota = gerarCodigoAleatorio();
 
-        Frota frota = new Frota(tamanhoFrota);
-        String codigoFrota = gerarCodigoAleatorio();
+            frotas.put(codigoFrota, frota);
 
-        frotas.put(codigoFrota, frota);
+            System.out.println("Frota criada com sucesso!\nCódigo da Frota: " + codigoFrota);
 
-        System.out.println("Frota criada com sucesso!\nCódigo da Frota: " + codigoFrota);
+        }catch(NumberFormatException e){
+            System.out.println("Tamanho inválido!");
+        }
     }
 
     /**
@@ -130,6 +143,7 @@ public class AppMenu {
 
         String nomeArq = "menuCombustiveis";
         limparTela();
+        
         int opcao = menu(nomeArq);
 
         switch (opcao) {
@@ -142,6 +156,7 @@ public class AppMenu {
             default:
                 return COMBUSTIVEL.GASOLINA;
         }
+    
     }
 
     /**
@@ -150,7 +165,7 @@ public class AppMenu {
      * 
      * @return frota escolhida
      */
-    public static String selecionarFrota() {
+    public static String selecionarFrota() throws NoSuchElementException{
 
         teclado = new Scanner(System.in);
 
@@ -178,7 +193,7 @@ public class AppMenu {
      * 
      * @throws FileNotFoundException aquivo não encontrado
      */
-    public static void adicionarVeiculoFrota() throws FileNotFoundException {
+    public static void adicionarVeiculoFrota() {
 
         try {
             String codigoFrota = selecionarFrota();
@@ -193,6 +208,8 @@ public class AppMenu {
             System.out.println("Digite a placa do veículo: ");
 
             String placa = teclado.nextLine();
+
+            
 
             COMBUSTIVEL combustivel = coletaCombustivel();
 
@@ -219,9 +236,10 @@ public class AppMenu {
                     break;
             }
 
-        } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado");
-        }
+            }catch(FileNotFoundException e){
+                System.out.println("Arquivo não encontrado");
+
+            }
     }
     
      /**
@@ -229,8 +247,16 @@ public class AppMenu {
      * @param veiculo
      * @param frota
      */
-    public static void addFrota(Veiculo veiculo, Frota frota) {
-        frota.adicionarVeiculo(veiculo);
+    public static void addFrota(Veiculo veiculo, Frota frota){
+        try{
+            frota.adicionarVeiculo(veiculo);
+        }catch(IllegalStateException e){
+            System.out.println("Frota já atingiu sua capacidade máxima!");
+            pausa();
+        }catch(IllegalArgumentException e){
+            System.out.println("Veículo com a mesma placa já existe na frota");
+            pausa();
+        }
     }
 
     /**
@@ -299,7 +325,7 @@ public class AppMenu {
     /**
      * Exibe rotas dispoíveis para serem relacionadas a veículos
      */
-    public static String selecionarRota() {
+    public static String selecionarRota() throws NoSuchElementException {
 
         teclado = new Scanner(System.in);
 
@@ -314,6 +340,7 @@ public class AppMenu {
 
         System.out.println("\nDigite o código da rota:");
 
+        
         String codigoRota = teclado.nextLine();
 
         if (rotasDisponiveis.containsKey(codigoRota)) {
@@ -339,21 +366,25 @@ public class AppMenu {
 
         System.out.println("Digite a placa do veículo: ");
 
-        String placa = teclado.nextLine();
+        try{
+            String placa = teclado.nextLine();
 
-        Veiculo veiculo = frota.getVeiculo(placa);
+            Veiculo veiculo = frota.getVeiculo(placa);
 
-        String codRota = selecionarRota();
+            String codRota = selecionarRota();
 
-        if (veiculo != null) {
-            if (veiculo.addRota(rotasDisponiveis.get(codRota))) {
-                System.out.println("Rota adicionada com sucesso!");
-                rotasDisponiveis.remove(codRota);
-                pausa();
-            } else {
-                System.out.println("Não foi possível adicionar rota!");
-                pausa();
+            if (veiculo != null) {
+                if (veiculo.addRota(rotasDisponiveis.get(codRota))) {
+                    System.out.println("Rota adicionada com sucesso!");
+                    rotasDisponiveis.remove(codRota);
+                    pausa();
+                } else {
+                    System.out.println("Não foi possível adicionar rota!");
+                    pausa();
+                }
             }
+        }catch(NoSuchElementException e){
+            System.out.println("Placas e rotas vazias não podem ser aceitas!");
         }
     }
     
@@ -464,6 +495,7 @@ public class AppMenu {
                     break;
                 default:
                     System.out.println("Opcão inválida");
+                    pausa();
                     break;
             }
         }
@@ -570,6 +602,7 @@ public class AppMenu {
                     break;
                 default:
                     System.out.println("Opcão inválida");
+                    pausa();
                     break;
             }
 

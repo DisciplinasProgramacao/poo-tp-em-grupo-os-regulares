@@ -242,12 +242,13 @@ public abstract class Veiculo {
 	}
 
 	public String relatorioGasto(){
+		DecimalFormat formato = new DecimalFormat("#.##");
 		String base = getPlaca() + ":\n" +
-		"\tGASTO TOTAL\t R$ "+this.gastoTotal()+"\n"+ 
-		"\tVALOR COMBUSTIVEL\t R$  "+this.tanque.calcularPreco(kmTotal)+"\n"+
-		"\tVALOR MANUTENCAO\t R$  "+listaManutencao.stream()
+		"\tGASTO TOTAL\t\t R$ "+ formato.format(this.gastoTotal())+"\n"+ 
+		"\tVALOR COMBUSTIVEL\t R$  "+ formato.format(this.tanque.calcularPreco(kmTotal))+"\n"+
+		"\tVALOR MANUTENCAO\t R$  "+ formato.format(listaManutencao.stream()
 				.mapToDouble(m -> m.getValor())
-				.sum();
+				.sum());
 		
 		return base;
 	}
